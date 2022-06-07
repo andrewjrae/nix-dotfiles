@@ -23,6 +23,7 @@
   ];
 
   imports = [
+    ./modules/alacritty.nix
     ./modules/zsh.nix
   ];
 
