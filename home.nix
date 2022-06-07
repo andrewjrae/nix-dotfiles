@@ -22,32 +22,16 @@
     htop
   ];
 
+  imports = [
+    ./modules/zsh.nix
+  ];
+
   programs.git = {
     enable = true;
     userEmail = "ajrae.nv@gmail.com";
     userName = "Andrew Rae";
     extraConfig.pull.rebase = true;
     extraConfig.init.defaultBranch = "development";
-  };
-
-  home.file.".config/oh-my-zsh/themes/ajrae.zsh-theme".source = ./ajrae.zsh-theme;
-  programs.zsh = {
-    enable = true;
-    autocd = true;
-    enableAutosuggestions = true;
-    enableCompletion = true;
-    oh-my-zsh = {
-          enable = true;
-          theme = "ajrae";
-	  custom = "$HOME/.config/oh-my-zsh";
-	  plugins = [ "git" "sudo"];
-    };
-    initExtra = "set -o vi";
-  };
-
-  programs.fzf = {
-    enable = true;
-    enableZshIntegration = true;
   };
 
   # Let Home Manager install and manage itself.
