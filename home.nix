@@ -16,6 +16,13 @@
   # changes in each release.
   home.stateVersion = "21.11";
 
+  # Emacs overlay for native comp
+  nixpkgs.overlays = [
+    (import (builtins.fetchTarball {
+      url = https://github.com/nix-community/emacs-overlay/archive/master.tar.gz;
+    }))
+  ];
+
   home.packages = with pkgs; [
     ripgrep
     fd
@@ -23,7 +30,8 @@
   ];
 
   imports = [
-    ./modules/alacritty.nix
+    ./modules/alacritty.nix # this may need nixGL to work correctly
+    ./modules/emacs.nix
     ./modules/fonts.nix
     ./modules/zsh.nix
   ];
