@@ -24,6 +24,7 @@
 
   imports = [
     ./modules/alacritty.nix
+    ./modules/fonts.nix
     ./modules/zsh.nix
   ];
 
