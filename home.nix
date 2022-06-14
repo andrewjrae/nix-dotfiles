@@ -27,6 +27,8 @@
     ripgrep
     fd
     htop
+    xclip
+    fsearch
   ];
 
   imports = [

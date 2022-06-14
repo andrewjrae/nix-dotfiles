@@ -13,6 +13,10 @@
       custom = "$HOME/.config/oh-my-zsh";
       plugins = [ "git" "sudo"];
     };
+    shellAliases = {
+      psrg = "ps -aux | rg -i";
+      xclp = "xclip -sel clip";
+    };
     initExtra = "set -o vi";
   };
 
