@@ -1,19 +1,29 @@
 { config, lib, pkgs, ... }:
 
+let emacs = with pkgs; ((emacsPackagesFor emacsPgtkNativeComp).emacsWithPackages (epkgs: [
+      epkgs.vterm
+      epkgs.pdf-tools
+      epkgs.org-pdftools
+    ]));
+in
 {
   home.sessionPath = [ "$HOME/.emacs.d/bin" ];
+
+
+  services.emacs = with pkgs; {
+    enable = true;
+    package = emacs;
+  };
+
   home.packages = with pkgs; [
     # doom dependencies
     git
     gnutls
     ripgrep
 
-    # Install emacs externally so we can manager the dotfiles manually
+    # Install emacs externally so we can manage the dotfiles manually
     # (this makes tinkering much easier)
-    ((emacsPackagesFor emacsPgtkNativeComp).emacsWithPackages (epkgs: [
-      epkgs.vterm
-      epkgs.pdf-tools
-    ]))
+    emacs
 
     # :tools lookup & :lang org +roam
     sqlite
