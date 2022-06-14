@@ -7,14 +7,6 @@ let emacs = with pkgs; ((emacsPackagesFor emacsPgtkNativeComp).emacsWithPackages
     ]));
 in
 {
-  home.sessionPath = [ "$HOME/.emacs.d/bin" ];
-
-
-  services.emacs = with pkgs; {
-    enable = true;
-    package = emacs;
-  };
-
   home.packages = with pkgs; [
     # doom dependencies
     git
@@ -43,4 +35,15 @@ in
       en en-computers en-science
     ]))
   ];
+
+  services.emacs = with pkgs; {
+    enable = true;
+    package = emacs;
+    defaultEditor = true;
+  };
+
+  home.sessionPath = [ "$HOME/.emacs.d/bin" ];
+
+  programs.zsh.shellAliases = { ecli = "env TERM=xterm-direct emacsclient -t"; };
+
 }
