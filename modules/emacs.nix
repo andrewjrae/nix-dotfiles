@@ -14,11 +14,14 @@ in
     ripgrep
 
     # Install emacs externally so we can manage the dotfiles manually
-    # (this makes tinkering much easier)
+    # (this makes tinkering and installing doom much easier)
     emacs
 
     # :tools lookup & :lang org +roam
     sqlite
+
+    # :lang (cc +lsp)
+    ccls
 
     # :lang org
     (texlive.combine {
@@ -36,7 +39,7 @@ in
     ]))
   ];
 
-  services.emacs = with pkgs; {
+  services.emacs = {
     enable = true;
     package = emacs;
     defaultEditor = true;
@@ -44,6 +47,6 @@ in
 
   home.sessionPath = [ "$HOME/.emacs.d/bin" ];
 
-  programs.zsh.shellAliases = { ecli = "env TERM=xterm-direct emacsclient -t"; };
+  programs.zsh.shellAliases = { ecli = "TERM=xterm-direct emacsclient -t"; };
 
 }
