@@ -1,0 +1,173 @@
+{
+  "nodes": {
+    "darwin": {
+      "inputs": {
+        "nixpkgs": [
+          "unstable"
+        ]
+      },
+      "locked": {
+        "lastModified": 1660320101,
+        "narHash": "sha256-LxyfH6HWKv73tMO+ZqylIqbFUvKijwJ143BXsh4GT/M=",
+        "owner": "supermarin",
+        "repo": "nix-darwin",
+        "rev": "307fa82fbf7a97590b877db74fe2bac5a3ef4bd6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "supermarin",
+        "ref": "applications-collision",
+        "repo": "nix-darwin",
+        "type": "github"
+      }
+    },
+    "emacs-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1662566546,
+        "narHash": "sha256-WOTGdsuGYSSQfRgIJ94slu9wj/GGF/9pKWhKI1tZcGU=",
+        "owner": "emacs-mirror",
+        "repo": "emacs",
+        "rev": "35b4205dee6c65e3e0fd00708eb95c84f2ca49e6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "emacs-mirror",
+        "repo": "emacs",
+        "type": "github"
+      }
+    },
+    "emacs-vterm-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1661934956,
+        "narHash": "sha256-OGW7QkCF4Genr90nQl4v+pS6g2RhlTFN3NXYCGm62Yw=",
+        "owner": "akermu",
+        "repo": "emacs-libvterm",
+        "rev": "d6fcd38b9544dd4d05dbe5db10e950043b68de9c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akermu",
+        "repo": "emacs-libvterm",
+        "type": "github"
+      }
+    },
+    "home-manager": {
+      "inputs": {
+        "nixpkgs": [
+          "unstable"
+        ],
+        "utils": "utils"
+      },
+      "locked": {
+        "lastModified": 1660257275,
+        "narHash": "sha256-tSUZu3HFtu5I4OeCfbYSvKgakLMrL9/DRAY0c0EvBRk=",
+        "owner": "supermarin",
+        "repo": "home-manager",
+        "rev": "185890963d71ea2c7ef96e5de38353a2fff592e1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "supermarin",
+        "repo": "home-manager",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1662096612,
+        "narHash": "sha256-R+Q8l5JuyJryRPdiIaYpO5O3A55rT+/pItBrKcy7LM4=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "21de2b973f9fee595a7a1ac4693efff791245c34",
+        "type": "github"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
+    "root": {
+      "inputs": {
+        "darwin": "darwin",
+        "emacs-src": "emacs-src",
+        "emacs-vterm-src": "emacs-vterm-src",
+        "home-manager": "home-manager",
+        "nixpkgs": "nixpkgs",
+        "spacebar": "spacebar",
+        "unstable": "unstable",
+        "yabai-src": "yabai-src"
+      }
+    },
+    "spacebar": {
+      "inputs": {
+        "nixpkgs": [
+          "unstable"
+        ]
+      },
+      "locked": {
+        "lastModified": 1639952514,
+        "narHash": "sha256-/uJiVl9oQwrquXG1EePV/FmNhs4o3mOAGhrcSPEbdKE=",
+        "owner": "shaunsingh",
+        "repo": "spacebar",
+        "rev": "fae55fce78f6130bf4d766eae09ae838447c60b4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "shaunsingh",
+        "repo": "spacebar",
+        "type": "github"
+      }
+    },
+    "unstable": {
+      "locked": {
+        "lastModified": 1662582422,
+        "narHash": "sha256-sr5HzjzhhdkFpvpGHVqHKC2gxp0F0Ml3oatI/xwlfJ0=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "5e633169703e9532cb5f88c51572a216c0f11083",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "master",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "utils": {
+      "locked": {
+        "lastModified": 1653893745,
+        "narHash": "sha256-0jntwV3Z8//YwuOjzhV2sgJJPt+HY6KhU7VZUL0fKZQ=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "1ed9fb1935d260de5fe1c2f7ee0ebaae17ed2fa1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "yabai-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1662573851,
+        "narHash": "sha256-jjVScKbEUzqBzGJsLr4/I0V2Hx/w2K/7G1T1QG6HtUM=",
+        "owner": "koekeishiya",
+        "repo": "yabai",
+        "rev": "3a40b5ef9d11e3d58630301db4606a45e2a3bfd1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "koekeishiya",
+        "repo": "yabai",
+        "type": "github"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

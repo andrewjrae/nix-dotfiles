@@ -1,10 +1,9 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, home-manager, nix-darwin, inputs,... }:
 
 {
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
   home.username = "ajrae";
-  home.homeDirectory = "/home/ajrae";
 
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
@@ -14,28 +13,21 @@
   # You can update Home Manager without changing this value. See
   # the Home Manager release notes for a list of state version
   # changes in each release.
-  home.stateVersion = "21.11";
+  home.stateVersion = "22.05";
 
   # Emacs overlay for native comp
-  nixpkgs.overlays = [
-    (import (builtins.fetchTarball {
-      url = https://github.com/nix-community/emacs-overlay/archive/master.tar.gz;
-    }))
-  ];
+#  nixpkgs.overlays = [
+#    (import (builtins.fetchTarball {
+#      url = https://github.com/nix-community/emacs-overlay/archive/master.tar.gz;
+#    }))
+#  ];
 
   home.packages = with pkgs; [
     ripgrep
     fd
     htop
-    xclip
-    fsearch
-  ];
-
-  imports = [
-    ./modules/alacritty.nix # this may need nixGL to work correctly
-    ./modules/emacs.nix
-    ./modules/fonts.nix
-    ./modules/zsh.nix
+    #xclip
+    #fsearch
   ];
 
   programs.git = {

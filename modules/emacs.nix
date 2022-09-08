@@ -1,17 +1,19 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, home-manager, inputs,... }:
 
-let emacs = with pkgs; ((emacsPackagesFor emacsPgtkNativeComp).emacsWithPackages (epkgs: [
-      epkgs.vterm
-      epkgs.pdf-tools
-      epkgs.org-pdftools
-    ]));
-in
+#let emacs = with pkgs; ((emacsPackagesFor emacsPgtkNativeComp).emacsWithPackages (epkgs: [
+#      epkgs.vterm
+#      epkgs.pdf-tools
+#      epkgs.org-pdftools
+#    ]));
+#in
 {
   home.packages = with pkgs; [
     # doom dependencies
     git
     gnutls
-    ripgrep
+    (ripgrep.override {withPCRE2 = true;})
+    fd
+    gnused
 
     # Install emacs externally so we can manage the dotfiles manually
     # (this makes tinkering and installing doom much easier)
@@ -39,14 +41,14 @@ in
     ]))
   ];
 
-  services.emacs = {
-    enable = true;
-    package = emacs;
-    defaultEditor = true;
-  };
+#  services.emacs = {
+#    enable = true;
+#    package = emacs;
+#    defaultEditor = true;
+#  };
 
   home.sessionPath = [ "$HOME/.emacs.d/bin" ];
 
-  programs.zsh.shellAliases = { ecli = "TERM=xterm-direct emacsclient -t"; };
+#  programs.zsh.shellAliases = { ecli = "TERM=xterm-direct emacsclient -t"; };
 
 }
