@@ -17,7 +17,7 @@
 
     # Install emacs externally so we can manage the dotfiles manually
     # (this makes tinkering and installing doom much easier)
-    emacs
+    emacs-mac
 
     # :tools lookup & :lang org +roam
     sqlite
@@ -41,11 +41,11 @@
     ]))
   ];
 
-#  services.emacs = {
-#    enable = true;
-#    package = emacs;
-#    defaultEditor = true;
-#  };
+ # services.emacs = {
+ #   enable = true;
+ #   package = emacs-src;
+ #   defaultEditor = true;
+ # };
 
   home.sessionPath = [ "$HOME/.emacs.d/bin" ];
 

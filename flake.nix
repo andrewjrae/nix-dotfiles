@@ -38,133 +38,159 @@
       flake = false;
     };
   };
-  outputs = { self, nixpkgs, darwin, home-manager, ... }@inputs: {
-    darwinConfigurations."ajrae-laptop" = darwin.lib.darwinSystem {
-      system = "aarch64-darwin";
-      modules = [
-        ./modules/mac.nix
-        #./modules/pam.nix
-        home-manager.darwinModule
-        {
-          home-manager = {
-            useGlobalPkgs = true;
-            useUserPackages = true;
-            users.ajrae = {
-              imports = [
-                ./modules/home.nix
-                ./modules/zsh.nix
-                ./modules/fonts.nix
-                ./modules/emacs.nix
-                ./modules/alacritty.nix
+
+  outputs = { self, nixpkgs, darwin, home-manager, ... }@inputs:
+    with inputs; let
+      yabai-overlay = final: prev: {
+        yabai =
+          let
+            version = "4.0.0-dev";
+            buildSymlinks = prev.runCommand "build-symlinks" { } ''
+                       mkdir -p $out/bin
+                       ln -s /usr/bin/xcrun /usr/bin/xcodebuild /usr/bin/tiffutil /usr/bin/qlmanage $out/bin
+                     '';
+          in
+            prev.yabai.overrideAttrs (old: {
+              inherit version;
+              src = inputs.yabai-src;
+
+              buildInputs = with prev.darwin.apple_sdk.frameworks; [
+                Carbon
+                Cocoa
+                ScriptingBridge
+                prev.xxd
+                SkyLight
               ];
-            };
-          };
-        }
-        ({ config, pkgs, lib, ... }: {
-          services.nix-daemon.enable = true;
-          #security.pam.enableSudoTouchIdAuth = true;
-          nixpkgs = {
-            config.allowUnfree = true;
-            overlays =
-              let
-                versionOf = input: input.rev;
-              in
-              with inputs; [
-                #nur.overlay
-                #spacebar.overlay
-                (final: prev: {
-                  #sf-mono-liga-bin = pkgs.callPackage ./pkgs/sf-mono-liga-bin { };
-#                  yabai =
-#                    let
-#                      version = "4.0.0-dev";
-#                      buildSymlinks = prev.runCommand "build-symlinks" { } ''
-#                        mkdir -p $out/bin
-#                        ln -s /usr/bin/xcrun /usr/bin/xcodebuild /usr/bin/tiffutil /usr/bin/qlmanage $out/bin
-#                      '';
-#                    in
-#                    prev.yabai.overrideAttrs (old: {
-#                      inherit version;
-#                      src = inputs.yabai-src;
-#
-#                      buildInputs = with prev.darwin.apple_sdk.frameworks; [
-#                        Carbon
-#                        Cocoa
-#                        ScriptingBridge
-#                        prev.xxd
-#                        SkyLight
-#                      ];
-#
-#                      nativeBuildInputs = [ buildSymlinks ];
-#                    });
-                  emacs-vterm = prev.stdenv.mkDerivation rec {
-                    pname = "emacs-vterm";
-                    version = "master";
 
-                    src = inputs.emacs-vterm-src;
+              nativeBuildInputs = [ buildSymlinks ];
+            });
+      };
+      emacs-overlay = (final: prev: {
+        emacs-vterm = prev.stdenv.mkDerivation rec {
+          pname = "emacs-vterm";
+          version = "master";
 
-                    nativeBuildInputs = [ prev.cmake prev.libtool prev.glib.dev ];
+          src = inputs.emacs-vterm-src;
 
-                    buildInputs =
-                      [ prev.glib.out prev.libvterm-neovim prev.ncurses ];
+          nativeBuildInputs = [ prev.cmake prev.libtool prev.glib.dev ];
 
-                    cmakeFlags = [ "-DUSE_SYSTEM_LIBVTERM=yes" ];
+          buildInputs =
+            [ prev.glib.out prev.libvterm-neovim prev.ncurses ];
 
-                    preConfigure = ''
+          cmakeFlags = [ "-DUSE_SYSTEM_LIBVTERM=yes" ];
+
+          preConfigure = ''
                       echo "include_directories(\"${prev.glib.out}/lib/glib-2.0/include\")" >> CMakeLists.txt
                       echo "include_directories(\"${prev.glib.dev}/include/glib-2.0\")" >> CMakeLists.txt
                       echo "include_directories(\"${prev.ncurses.dev}/include\")" >> CMakeLists.txt
                       echo "include_directories(\"${prev.libvterm-neovim}/include\")" >> CMakeLists.txt
                     '';
 
-                    installPhase = ''
+          installPhase = ''
                       mkdir -p $out
                       cp ../vterm-module.so $out
                       cp ../vterm.el $out
                     '';
 
-                  };
-                  emacs-mac = (prev.emacs.override {
-                    srcRepo = true;
-                    nativeComp = true;
-                    withSQLite3 = true;
-                    withXwidgets = true;
-                  }).overrideAttrs (o: rec {
-                    version = "29.0.50";
-                    src = inputs.emacs-src;
+        };
+        emacs-mac = (prev.emacs.override {
+          srcRepo = true;
+          nativeComp = true;
+          withSQLite3 = true;
+          withXwidgets = false;
+        }).overrideAttrs (o: rec {
+          version = "29.0.50";
+          src = inputs.emacs-src;
 
-                    buildInputs = o.buildInputs
-                      ++ [ prev.darwin.apple_sdk.frameworks.WebKit ];
+          buildInputs = o.buildInputs
+                        ++ [ prev.darwin.apple_sdk.frameworks.WebKit ];
 
-                    configureFlags = o.configureFlags ++ [
-                      "--without-gpm"
-                      "--without-dbus"
-                      "--without-mailutils"
-                      "--without-pop"
-                    ];
+          configureFlags = o.configureFlags ++ [
+            "--without-gpm"
+            "--without-dbus"
+            "--without-mailutils"
+            "--without-pop"
+          ];
 
-                    patches = [
-                      ./patches/fix-window-role.patch
-                      ./patches/system-appearance.patch
-                    ];
+          patches = [
+            ./patches/fix-window-role.patch
+            ./patches/system-appearance.patch
+          ];
 
-                    postPatch = o.postPatch + ''
+          postPatch = o.postPatch + ''
                       substituteInPlace lisp/loadup.el \
                       --replace '(emacs-repository-get-branch)' '"master"'
                     '';
 
-                    postInstall = o.postInstall + ''
+          postInstall = o.postInstall + ''
                       cp ${final.emacs-vterm}/vterm.el $out/share/emacs/site-lisp/vterm.el
                       cp ${final.emacs-vterm}/vterm-module.so $out/share/emacs/site-lisp/vterm-module.so
                     '';
 
-                    CFLAGS =
-                      "-DMAC_OS_X_VERSION_MAX_ALLOWED=110203 -g -O3 -mtune=native -march=native -fomit-frame-pointer";
-                  });
-                })
+          CFLAGS =
+            "-DMAC_OS_X_VERSION_MAX_ALLOWED=110203 -g -O3 -mtune=native -march=native -fomit-frame-pointer";
+        });
+      });
+    in {
+      darwinConfigurations."ajrae-laptop" = darwin.lib.darwinSystem {
+        system = "aarch64-darwin";
+        modules = [
+          ./modules/mac.nix
+          #./modules/pam.nix
+          home-manager.darwinModule
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              users.ajrae = {
+                imports = [
+                  ./modules/home.nix
+                  ./modules/zsh.nix
+                  ./modules/fonts.nix
+                  ./modules/emacs.nix
+                  ./modules/alacritty.nix
+                ];
+              };
+            };
+            nixpkgs = {
+              config.allowUnfree = true;
+              overlays = [ emacs-overlay ];
+            };
+          }
+        ];
+      };
+      darwinConfigurations."ajrae-laptop-twm" = darwin.lib.darwinSystem {
+        system = "aarch64-darwin";
+        modules = [
+          ./modules/mac.nix
+          ./modules/twm.nix
+          #./modules/pam.nix
+          home-manager.darwinModule
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              users.ajrae = {
+                imports = [
+                  ./modules/home.nix
+                  ./modules/zsh.nix
+                  ./modules/fonts.nix
+                  ./modules/emacs.nix
+                  ./modules/alacritty.nix
+                ];
+              };
+            };
+            nixpkgs = {
+              config.allowUnfree = true;
+              overlays = [
+                #nur.overlay
+                emacs-overlay
+                yabai-overlay
+                spacebar.overlay
               ];
-          };
-        })
-      ];
+            };
+          }
+        ];
+      };
     };
-  };
 }
