@@ -14,11 +14,11 @@
      split_ratio = "0.50";
      window_placement = "second_child";
      # Gaps
-     window_gap = 8;
-     top_padding = 8;
-     bottom_padding = 8;
-     left_padding = 8;
-     right_padding = 8;
+     window_gap = 5;
+     top_padding = 5;
+     bottom_padding = 5;
+     left_padding = 5;
+     right_padding = 5;
      # shadows and borders
      window_shadow = "on";
      window_border = "off";
@@ -58,25 +58,29 @@
  services.skhd = {
    enable = true;
    package = pkgs.skhd;
-   skhdConfig = let passthru = key:
-        ''skhd -k "hyper - 1" ; skhd -k "${key}" ; skhd -k "hyper - 1"'';
+   skhdConfig = let
+        passthru = key: ''skhd -k "hyper - 1" ; skhd -k "${key}" ; skhd -k "hyper - 1"'';
+        passthru-except-term = key:
+        ''[
+             "Alacritty" ~
+             "emacs" ~
+             * : ${passthru key}
+          ]'';
      in
         ''
      :: default
      :: passthru
 
      ########## Yabai bindings
-     # open terminal
-     cmd - t : open -n -a Alacritty.app
-
-     # open firefox
-     cmd - b : open -n -a Firefox.app
-
-     # open emacs
-     cmd - e : emacsclient -c -a emacs
-
-     # open spotlight
-     cmd - s : ${passthru "cmd - space"}
+     # open to apps
+     cmd - t : open -n -a Alacritty
+     cmd - b : open -a Firefox
+     cmd - o : open -a "Microsoft Outlook"
+     cmd - s : open -a Slack
+     cmd - m : open -a Spotify
+     # cmd - e : emacsclient -c -a emacs
+     cmd - e : open -a Emacs
+     cmd - r : ${passthru "cmd - space"}
 
      # focus window
      cmd - n : yabai -m window --focus next
@@ -130,57 +134,33 @@
      hyper - 1 ; passthru
      passthru < hyper - 1 ; default
 
-     ctrl - a : ${passthru "cmd - a"}
-     ctrl - p : ${passthru "cmd - p"}
-     ctrl - insert [
-          "Alacritty" ~
-          "emacs" ~
-          * : ${passthru "cmd - c"}
-     ]
-     shift - insert [
-          "Alacritty" ~
-          "emacs" ~
-          * : ${passthru "cmd - v"}
-     ]
-     ctrl - c [
-          "Alacritty" ~
-          "emacs" ~
-          * : ${passthru "cmd - c"}
-     ]
-     ctrl - v : ${passthru "cmd - v"}
-     ctrl - z : ${passthru "cmd - z"}
-     ctrl - y : ${passthru "shift + cmd - z"}
-     ctrl - f : ${passthru "cmd - f"}
-     ctrl - t : ${passthru "cmd - t"}
-     ctrl - k : ${passthru "cmd - k"}
-     ctrl - w : ${passthru "cmd - w"}
-     home : ${passthru "cmd - left"}
-     end : ${passthru "cmd - right"}
-     ctrl - left : ${passthru "alt - left"}
-     ctrl - right : ${passthru "alt - right"}
-     ctrl - down : ${passthru "alt - down"}
-     ctrl - up : ${passthru "alt - up"}
-     shift - home : ${passthru "shift + cmd - left"}
-     shift - end : ${passthru "shift + cmd - right"}
-     shift + ctrl - left : ${passthru "shift + alt - left"}
-     shift + ctrl - right : ${passthru "shift + alt - right"}
-     shift + ctrl - down : ${passthru "shift + alt - down"}
-     shift + ctrl - up : ${passthru "shift + alt - up"}
-     ctrl - s [
-          "Alacritty" ~
-          "emacs" ~
-          * : ${passthru "cmd - s"}
-     ]
-     ctrl - backspace [
-          "Alacritty" ~
-          "emacs" ~
-          * : ${passthru "alt - backspace"}
-     ]
-     ctrl - delete [
-          "Alacritty" ~
-          "emacs" ~
-          * : ${passthru "alt - delete"}
-     ]
+     home ${passthru-except-term "cmd - left"}
+     end ${passthru-except-term "cmd - right"}
+     ctrl - a ${passthru-except-term "cmd - a"}
+     ctrl - p ${passthru-except-term "cmd - p"}
+     ctrl - c ${passthru-except-term "cmd - c"}
+     ctrl - v ${passthru-except-term "cmd - v"}
+     ctrl - z ${passthru-except-term "cmd - z"}
+     ctrl - y ${passthru-except-term "shift + cmd - z"}
+     ctrl - f ${passthru-except-term "cmd - f"}
+     ctrl - t ${passthru-except-term "cmd - t"}
+     ctrl - k ${passthru-except-term "cmd - k"}
+     ctrl - w ${passthru-except-term "cmd - w"}
+     ctrl - insert ${passthru-except-term "cmd - c"}
+     shift - insert ${passthru-except-term "cmd - v"}
+     ctrl - left ${passthru-except-term "alt - left"}
+     ctrl - right ${passthru-except-term "alt - right"}
+     ctrl - down ${passthru-except-term "alt - down"}
+     ctrl - up ${passthru-except-term "alt - up"}
+     shift - home ${passthru-except-term "shift + cmd - left"}
+     shift - end ${passthru-except-term "shift + cmd - right"}
+     shift + ctrl - left ${passthru-except-term "shift + alt - left"}
+     shift + ctrl - right ${passthru-except-term "shift + alt - right"}
+     shift + ctrl - down ${passthru-except-term "shift + alt - down"}
+     shift + ctrl - up ${passthru-except-term "shift + alt - up"}
+     ctrl - s ${passthru-except-term "cmd - s"}
+     ctrl - backspace ${passthru-except-term "alt - backspace"}
+     ctrl - delete ${passthru-except-term "alt - delete"}
    '';
  };
 
