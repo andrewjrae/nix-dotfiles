@@ -197,7 +197,7 @@
           }
         ];
       };
-      homemanagerConfigurations."andrewr-dev" = homemanager.lib.homemanagerConfiguration {
+      homeManagerConfigurations."andrewr-dev" = homeManager.lib.homeManagerConfiguration {
         system = "x86_64-linux";
         username = "andrewr";
         homeDirectory ="/cb/home/andrewr";
