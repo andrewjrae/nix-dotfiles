@@ -207,6 +207,7 @@
           .modules/emacs.nix
         ];
         nixpkgs.overlays = [ emacs-overlay.overlay ];
+        extraSpecialArgs = { inherit nixpkgs; };
       };
     };
 }
