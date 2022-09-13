@@ -9,11 +9,11 @@
    config = {
      # layout
      layout = "bsp";
-     # layout = "stack";
      auto_balance = "off";
      split_ratio = "0.50";
      window_placement = "second_child";
      # Gaps
+     external_bar = "all:32:0";
      window_gap = 5;
      top_padding = 5;
      bottom_padding = 5;
@@ -60,7 +60,7 @@
    package = pkgs.skhd;
    skhdConfig = let
         passthru = key: ''skhd -k "hyper - 1" ; skhd -k "${key}" ; skhd -k "hyper - 1"'';
-        passthru-except-term = key:
+        remap-for-mac = key:
         ''[
              "Alacritty" ~
              "emacs" ~
@@ -74,6 +74,7 @@
      ########## Yabai bindings
      # open to apps
      cmd - t : open -n -a Alacritty
+     cmd - i : open -a Alacritty
      cmd - b : open -a Firefox
      cmd - o : open -a "Microsoft Outlook"
      cmd - s : open -a Slack
@@ -81,6 +82,7 @@
      # cmd - e : emacsclient -c -a emacs
      cmd - e : open -a Emacs
      cmd - r : ${passthru "cmd - space"}
+     cmd - q : open -n -a Alacritty --args -e qalc
 
      # focus window
      cmd - n : yabai -m window --focus next
@@ -134,33 +136,35 @@
      hyper - 1 ; passthru
      passthru < hyper - 1 ; default
 
-     home ${passthru-except-term "cmd - left"}
-     end ${passthru-except-term "cmd - right"}
-     ctrl - a ${passthru-except-term "cmd - a"}
-     ctrl - p ${passthru-except-term "cmd - p"}
-     ctrl - c ${passthru-except-term "cmd - c"}
-     ctrl - v ${passthru-except-term "cmd - v"}
-     ctrl - z ${passthru-except-term "cmd - z"}
-     ctrl - y ${passthru-except-term "shift + cmd - z"}
-     ctrl - f ${passthru-except-term "cmd - f"}
-     ctrl - t ${passthru-except-term "cmd - t"}
-     ctrl - k ${passthru-except-term "cmd - k"}
-     ctrl - w ${passthru-except-term "cmd - w"}
-     ctrl - insert ${passthru-except-term "cmd - c"}
-     shift - insert ${passthru-except-term "cmd - v"}
-     ctrl - left ${passthru-except-term "alt - left"}
-     ctrl - right ${passthru-except-term "alt - right"}
-     ctrl - down ${passthru-except-term "alt - down"}
-     ctrl - up ${passthru-except-term "alt - up"}
-     shift - home ${passthru-except-term "shift + cmd - left"}
-     shift - end ${passthru-except-term "shift + cmd - right"}
-     shift + ctrl - left ${passthru-except-term "shift + alt - left"}
-     shift + ctrl - right ${passthru-except-term "shift + alt - right"}
-     shift + ctrl - down ${passthru-except-term "shift + alt - down"}
-     shift + ctrl - up ${passthru-except-term "shift + alt - up"}
-     ctrl - s ${passthru-except-term "cmd - s"}
-     ctrl - backspace ${passthru-except-term "alt - backspace"}
-     ctrl - delete ${passthru-except-term "alt - delete"}
+     home ${remap-for-mac "cmd - left"}
+     end ${remap-for-mac "cmd - right"}
+     ctrl - a ${remap-for-mac "cmd - a"}
+     ctrl - p ${remap-for-mac "cmd - p"}
+     ctrl - c ${remap-for-mac "cmd - c"}
+     ctrl - v ${remap-for-mac "cmd - v"}
+     ctrl - z ${remap-for-mac "cmd - z"}
+     ctrl - y ${remap-for-mac "shift + cmd - z"}
+     ctrl - f ${remap-for-mac "cmd - f"}
+     ctrl - t ${remap-for-mac "cmd - t"}
+     ctrl - k ${remap-for-mac "cmd - k"}
+     ctrl - w ${remap-for-mac "cmd - w"}
+     ctrl - n ${remap-for-mac "cmd - n"}
+     ctrl - insert ${remap-for-mac "cmd - c"}
+     shift - insert ${remap-for-mac "cmd - v"}
+     ctrl - left ${remap-for-mac "alt - left"}
+     ctrl - right ${remap-for-mac "alt - right"}
+     ctrl - down ${remap-for-mac "alt - down"}
+     ctrl - up ${remap-for-mac "alt - up"}
+     shift - home ${remap-for-mac "shift + cmd - left"}
+     shift - end ${remap-for-mac "shift + cmd - right"}
+     shift + ctrl - left ${remap-for-mac "shift + alt - left"}
+     shift + ctrl - right ${remap-for-mac "shift + alt - right"}
+     shift + ctrl - down ${remap-for-mac "shift + alt - down"}
+     shift + ctrl - up ${remap-for-mac "shift + alt - up"}
+     ctrl - s ${remap-for-mac "cmd - s"}
+     ctrl - backspace ${remap-for-mac "alt - backspace"}
+     ctrl - delete ${remap-for-mac "alt - delete"}
+     shift + ctrl - t ${remap-for-mac "shift + cmd - t"}
    '';
  };
 

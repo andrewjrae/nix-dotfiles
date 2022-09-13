@@ -27,6 +27,11 @@
       url = "github:koekeishiya/yabai";
       flake = false;
     };
+    # Emacs overlay
+    emacs-overlay = {
+      url = "github:nix-community/emacs-overlay";
+      inputs.nixpkgs.follows = "unstable";
+    };
     # SRC for macOS emacs overlay
     emacs-src = {
       url = "github:emacs-mirror/emacs";
@@ -65,7 +70,7 @@
               nativeBuildInputs = [ buildSymlinks ];
             });
       };
-      emacs-overlay = (final: prev: {
+      emacs-mac-overlay = (final: prev: {
         emacs-vterm = prev.stdenv.mkDerivation rec {
           pname = "emacs-vterm";
           version = "master";
@@ -154,7 +159,7 @@
             };
             nixpkgs = {
               config.allowUnfree = true;
-              overlays = [ emacs-overlay ];
+              overlays = [ emacs-mac-overlay ];
             };
           }
         ];
@@ -184,13 +189,24 @@
               config.allowUnfree = true;
               overlays = [
                 #nur.overlay
-                emacs-overlay
+                emacs-mac-overlay
                 yabai-overlay
                 spacebar.overlay
               ];
             };
           }
         ];
+      };
+      homemanagerConfigurations."andrewr-dev" = homemanager.lib.homemanagerConfiguration {
+        system = "x86_64-linux";
+        username = "andrewr";
+        homeDirectory ="/cb/home/andrewr";
+        configuration = ./modules/home.nix;
+        extraModules = [
+          .modules/zsh.nix
+          .modules/emacs.nix
+        ];
+        nixpkgs.overlays = [ emacs-overlay.overlay ];
       };
     };
 }

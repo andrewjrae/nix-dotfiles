@@ -1,11 +1,11 @@
 { config, lib, pkgs, home-manager, inputs,... }:
 
-#let emacs = with pkgs; ((emacsPackagesFor emacsPgtkNativeComp).emacsWithPackages (epkgs: [
-#      epkgs.vterm
-#      epkgs.pdf-tools
-#      epkgs.org-pdftools
-#    ]));
-#in
+let emacs = with pkgs; ((emacsPackagesFor emacsPgtkNativeComp).emacsWithPackages (epkgs: [
+     epkgs.vterm
+     epkgs.pdf-tools
+     epkgs.org-pdftools
+   ]));
+in
 {
   home.packages = with pkgs; [
     # doom dependencies
@@ -17,7 +17,9 @@
 
     # Install emacs externally so we can manage the dotfiles manually
     # (this makes tinkering and installing doom much easier)
-    emacs-mac
+    (if pkgs.stdenv.isDarwin
+      then emacs-mac
+      else emacs)
 
     # :tools lookup & :lang org +roam
     sqlite
@@ -49,6 +51,6 @@
 
   home.sessionPath = [ "$HOME/.emacs.d/bin" ];
 
-#  programs.zsh.shellAliases = { ecli = "TERM=xterm-direct emacsclient -t"; };
+#  programs.zsh.shellAliases = { ecli = "TERM=xterm-24bit emacsclient -t"; };
 
 }

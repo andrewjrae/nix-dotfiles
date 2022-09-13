@@ -1,4 +1,4 @@
-{ config, pkgs, lib, home-manager, nix-darwin, inputs,... }:
+{ config, pkgs, lib, home-manager, inputs,... }:
 
 {
   # This value determines the Home Manager release that your
@@ -11,28 +11,26 @@
   # changes in each release.
   home.stateVersion = "22.05";
 
-  # Emacs overlay for native comp
-#  nixpkgs.overlays = [
-#    (import (builtins.fetchTarball {
-#      url = https://github.com/nix-community/emacs-overlay/archive/master.tar.gz;
-#    }))
-#  ];
-
   home.packages = with pkgs; [
-    ripgrep
+    (ripgrep.override {withPCRE2 = true;})
     fd
     htop
+    libqalculate
     #xclip
     #fsearch
   ];
 
-  programs.git = {
-    enable = true;
-    userEmail = "ajrae.nv@gmail.com";
-    userName = "Andrew Rae";
-    extraConfig.pull.rebase = true;
-    extraConfig.init.defaultBranch = "development";
-  };
+  programs.git = if config.home.username == "andrewr"
+                 then
+                   { enable = false; }
+                 else
+                   {
+                     enable = true;
+                     userEmail = "ajrae.nv@gmail.com";
+                     userName = "Andrew Rae";
+                     extraConfig.pull.rebase = true;
+                     extraConfig.init.defaultBranch = "development";
+                   };
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
