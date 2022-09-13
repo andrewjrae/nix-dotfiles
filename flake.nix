@@ -199,8 +199,9 @@
           }
         ];
       };
-      homeManagerConfigurations."andrewr-dev" = home-manager.lib.homeManagerConfiguration rec {
+      homeManagerConfigurations."andrewr-dev" = let
         system = "86_64-linux";
+      in home-manager.lib.homeManagerConfiguration rec {
         modules = [
           ./users/andrewr/home.nix
           ./modules/general.nix
