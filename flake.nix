@@ -149,7 +149,8 @@
               useUserPackages = true;
               users.ajrae = {
                 imports = [
-                  ./modules/home.nix
+                  ./users/ajrae/home.nix
+                  ./modules/general.nix
                   ./modules/zsh.nix
                   ./modules/fonts.nix
                   ./modules/emacs.nix
@@ -177,7 +178,8 @@
               useUserPackages = true;
               users.ajrae = {
                 imports = [
-                  ./modules/home.nix
+                  ./users/ajrae/home.nix
+                  ./modules/general.nix
                   ./modules/zsh.nix
                   ./modules/fonts.nix
                   ./modules/emacs.nix
@@ -198,13 +200,12 @@
         ];
       };
       homeManagerConfigurations."andrewr-dev" = home-manager.lib.homeManagerConfiguration rec {
-        system = "x86_64-linux";
-        username = "andrewr";
-        homeDirectory ="/cb/home/andrewr";
-        configuration = ./modules/home.nix;
-        extraModules = [
-          .modules/zsh.nix
-          .modules/emacs.nix
+        system = "86_64-linux";
+        modules = [
+          ./users/andrewr/home.nix
+          ./modules/general.nix
+          ./modules/zsh.nix
+          ./modules/emacs.nix
         ];
         pkgs = import nixpkgs {
           overlays = [ emacs-overlay.overlay ];
