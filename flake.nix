@@ -136,6 +136,10 @@
             "-DMAC_OS_X_VERSION_MAX_ALLOWED=110203 -g -O3 -mtune=native -march=native -fomit-frame-pointer";
         });
       });
+      homeManagerConfFor = config: { ... }: {
+        nixpkgs.overlays = [ emacs-overlay.overlay nur.overlay ];
+        imports = [ config ];
+      };
     in {
       darwinConfigurations."ajrae-laptop" = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
@@ -201,13 +205,11 @@
         system = "x86_64-linux";
         username = "andrewr";
         homeDirectory ="/cb/home/andrewr";
-        configuration = ./modules/home.nix;
+        configuration = homeManagerConfFor ./modules/home.nix;
         extraModules = [
-          .modules/zsh.nix
-          .modules/emacs.nix
+          homeManagerConfFor .modules/zsh.nix
+          homeManagerConfFor .modules/emacs.nix
         ];
-        nixpkgs.overlays = [ emacs-overlay.overlay ];
-        extraSpecialArgs = { inherit nixpkgs; };
       };
     };
 }
