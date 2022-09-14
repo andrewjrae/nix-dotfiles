@@ -1,10 +1,14 @@
 { config, lib, pkgs, home-manager, inputs,... }:
 
-let emacs = with pkgs; ((emacsPackagesFor emacsPgtkNativeComp).emacsWithPackages (epkgs: [
-     epkgs.vterm
-     epkgs.pdf-tools
-     epkgs.org-pdftools
-   ]));
+let
+  emacs-gui = with pkgs; ((emacsPackagesFor emacsPgtkNativeComp).emacsWithPackages (epkgs: [
+    epkgs.vterm
+    epkgs.pdf-tools
+    epkgs.org-pdftools
+  ]));
+  emacs-tui = with pkgs; ((emacsPackagesFor emacsNativeComp).emacsWithPackages (epkgs: [
+    epkgs.vterm
+  ]));
 in
 {
   home.packages = with pkgs; [
@@ -19,7 +23,7 @@ in
     # (this makes tinkering and installing doom much easier)
     (if pkgs.stdenv.isDarwin
       then emacs-mac
-      else emacs)
+      else emacs-tui)
 
     # :tools lookup & :lang org +roam
     sqlite
