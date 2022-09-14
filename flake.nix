@@ -199,7 +199,7 @@
           }
         ];
       };
-      homeManagerConfigurations."andrewr-dev" = let
+      homeConfigurations."andrewr-dev" = let
         system = "x86_64-linux";
       in home-manager.lib.homeManagerConfiguration rec {
         modules = [
