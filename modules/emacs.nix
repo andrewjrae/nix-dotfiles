@@ -55,6 +55,6 @@ in
 
   home.sessionPath = [ "$HOME/.emacs.d/bin" ];
 
-#  programs.zsh.shellAliases = { ecli = "TERM=xterm-24bit emacsclient -t"; };
+ programs.zsh.shellAliases = { ecli = "TERM=xterm-24bit emacsclient -t"; };
 
 }
