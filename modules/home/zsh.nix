@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 {
-  xdg.configFile."oh-my-zsh/themes/ajrae.zsh-theme".source = ../configs/oh-my-zsh/ajrae.zsh-theme;
+  xdg.configFile."oh-my-zsh/themes/ajrae.zsh-theme".source = ../../configs/oh-my-zsh/ajrae.zsh-theme;
   programs.zsh = {
     enable = true;
     autocd = true;
