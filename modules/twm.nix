@@ -51,6 +51,7 @@
      yabai -m rule --add app='Finder' manage=off
      yabai -m rule --add app='Microsoft Teams' manage=off
      yabai -m rule --add app='zoom.us' manage=off
+     yabai -m signal --add event=space_changed action='echo $YABAI_RECENT_SPACE_ID > /tmp/yabai-last-space' active=yes
    '';
  };
 
@@ -66,6 +67,8 @@
              "emacs" ~
              * : ${passthru key}
           ]'';
+        focus-space = index: ''skhd -k "ctrl - ${index}"'';
+        last-space-index = ''$(yabai -m query --spaces | jq --argjson id `cat /tmp/yabai-last-space` '.[] | select(.id == $id).index')'';
      in
         ''
      :: default
@@ -73,16 +76,17 @@
 
      ########## Yabai bindings
      # open to apps
-     cmd - t : open -n -a Alacritty
-     cmd - i : open -a Alacritty
+     cmd - t : open -n -a ~/Applications/Home\ Manager\ Apps/Alacritty.app
+     cmd - i : open -a ~/Applications/Home\ Manager\ Apps/Alacritty.app
      cmd - b : open -a Firefox
      cmd - o : open -a "Microsoft Outlook"
      cmd - s : open -a Slack
      cmd - m : open -a Spotify
      # cmd - e : emacsclient -c -a emacs
-     cmd - e : open -a Emacs
+     cmd - e : open -a ~/Applications/Home\ Manager\ Apps/Emacs.app
      cmd - r : ${passthru "cmd - space"}
      cmd - q : open -n -a Alacritty --args -e qalc
+     cmd - p : rofi-pass
 
      # focus window
      cmd - n : yabai -m window --focus next
@@ -96,15 +100,16 @@
      cmd - x : yabai -m window --close
 
      # focus spaces
-     cmd - space : yabai -m space --focus recent
-     cmd - 1 : yabai -m space --focus 1
-     cmd - 2 : yabai -m space --focus 2
-     cmd - 3 : yabai -m space --focus 3
-     cmd - 4 : yabai -m space --focus 4
-     cmd - 5 : yabai -m space --focus 5
-     cmd - 6 : yabai -m space --focus 6
-     cmd - 7 : yabai -m space --focus 7
-     cmd - 8 : yabai -m space --focus 8
+     cmd - space : ${focus-space last-space-index}
+     cmd - 1 : ${focus-space "1"}
+     cmd - 2 : ${focus-space "2"}
+     cmd - 3 : ${focus-space "3"}
+     cmd - 4 : ${focus-space "4"}
+     cmd - 5 : ${focus-space "5"}
+     cmd - 6 : ${focus-space "6"}
+     cmd - 7 : ${focus-space "7"}
+     cmd - 8 : ${focus-space "8"}
+     cmd - 9 : ${focus-space "9"}
 
      # send window to desktop
      ctrl + cmd - space : yabai -m window --space recent
@@ -165,6 +170,9 @@
      ctrl - backspace ${remap-for-mac "alt - backspace"}
      ctrl - delete ${remap-for-mac "alt - delete"}
      shift + ctrl - t ${remap-for-mac "shift + cmd - t"}
+     # screen shots
+     0x69 : ${passthru "shift + cmd - 3"}
+     shift + ctrl - 0x69 : ${passthru "shift + ctrl + cmd - 4"}
    '';
  };
 
@@ -185,7 +193,7 @@
      spacing_right = 25;
      text_font = ''"Fira Sans:Regular:16.0"'';
      icon_font = ''"Font Awesome 5 Free:Solid:14.0"'';
-     background_color = "0x44282c34";
+     background_color = "0x88282c34";
      foreground_color = "0xffbbc2cf";
      space_icon_color = "0xffc678dd";
      power_icon_color = "0xff98be65";

@@ -25,10 +25,15 @@
 
   services.nix-daemon.enable = true;
   programs.zsh.enable = true;
+  programs.gnupg.agent.enable = true;
 
   users.users.ajrae = {
     home = "/Users/ajrae";
-    packages = [ pkgs.skhd ];
+    packages = with pkgs; [
+      yabai
+      skhd
+      jq
+    ];
   };
   networking.hostName = "tricouni";
   system.stateVersion = 4;

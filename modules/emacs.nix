@@ -9,6 +9,11 @@ let
   emacs-tui = with pkgs; ((emacsPackagesFor emacsNativeComp).emacsWithPackages (epkgs: [
     epkgs.vterm
   ]));
+  emacs-mac = with pkgs; ((emacsPackagesFor emacsNativeComp).emacsWithPackages (epkgs: [
+    epkgs.vterm
+    epkgs.pdf-tools
+    epkgs.org-pdftools
+  ]));
 in
 {
   home.packages = with pkgs; [
@@ -38,14 +43,15 @@ in
     (if config.isServer then
       fd  # duplicate item
      else
-       (texlive.combine {
+       [(texlive.combine {
          inherit (texlive)
            scheme-medium
            collection-latexextra
            fontawesome5
            roboto
-           latexmk;
-       })
+           latexmk;})
+        pandoc
+       ]
     )
 
     # :checkers spell

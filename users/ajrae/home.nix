@@ -1,8 +1,8 @@
 { config, pkgs, lib, home-manager, inputs,... }:
 
 {
-  home.username = "ajrae";
-  home.homeDirectory = "/home/ajrae";
+  # home.username = "ajrae";
+  # home.homeDirectory = "/home/ajrae";
   home.stateVersion = "22.05";
 
   programs.git = {
