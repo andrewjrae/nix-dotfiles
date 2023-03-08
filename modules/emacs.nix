@@ -14,6 +14,11 @@ let
     epkgs.pdf-tools
     epkgs.org-pdftools
   ]));
+  emacs-in-use = (if config.isServer
+                  then emacs-tui
+                  else (if pkgs.stdenv.isDarwin
+                        then emacs-mac
+                        else emacs-gui));
 in
 {
   home.packages = with pkgs; [
@@ -26,11 +31,7 @@ in
 
     # Install doom emacs externally so we can manage the dotfiles manually
     # (this makes tinkering and installing doom much easier)
-    (if config.isServer
-     then emacs-tui
-     else (if pkgs.stdenv.isDarwin
-           then emacs-mac
-           else emacs-gui))
+    emacs-in-use
 
     # :tools lookup & :lang org +roam
     sqlite
@@ -39,32 +40,31 @@ in
     ccls
     #clang-tools
 
-    # :lang org
-    (if config.isServer then
-      fd  # duplicate item
-     else
-       [(texlive.combine {
-         inherit (texlive)
-           scheme-medium
-           collection-latexextra
-           fontawesome5
-           roboto
-           latexmk;})
-        pandoc
-       ]
-    )
-
     # :checkers spell
     (aspellWithDicts (ds: with ds; [
       en en-computers en-science
     ]))
-  ];
+  ]
+  ++
+  # :lang org
+  (if config.isServer then
+    []
+   else
+     [(texlive.combine {
+       inherit (texlive)
+         scheme-medium
+         collection-latexextra
+         fontawesome5
+         roboto
+         latexmk;})
+      pandoc]
+  );
 
-  # services.emacs = {
-  #   enable = true;
-  #   package = emacs-src;
-  #   defaultEditor = true;
-  # };
+  services.emacs = {
+    enable = lib.mkDefault false;
+    package = emacs-in-use;
+    defaultEditor = true;
+  };
 
   home.sessionPath = [ "$HOME/.emacs.d/bin" ];
 
