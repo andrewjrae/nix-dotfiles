@@ -15,9 +15,17 @@
     };
     shellAliases = {
       psrg = "ps -aux | rg -i";
+      beep = "echo \"\\a\"";
+      latr = "ls -lahtr";
       xclp = "xclip -sel clip";
     };
-    initExtra = "set -o vi";
+    initExtra = ''
+        # Change to Zsh's default readkey engine
+        ZVM_VI_HIGHLIGHT_FOREGROUND=#bbc2cf
+        ZVM_VI_HIGHLIGHT_BACKGROUND=#3e4451
+        source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+        zvm_after_init_commands+=('source ${pkgs.fzf}/share/fzf/key-bindings.zsh')
+      '';
   };
 
   programs.fzf = {

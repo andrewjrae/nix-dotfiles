@@ -137,7 +137,7 @@
         });
       });
     in {
-      darwinConfigurations."ajrae-laptop" = darwin.lib.darwinSystem {
+      darwinConfigurations."ajrae-mac" = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         modules = [
           ./modules/mac.nix
@@ -165,7 +165,7 @@
           }
         ];
       };
-      darwinConfigurations."ajrae-laptop-twm" = darwin.lib.darwinSystem {
+      darwinConfigurations."ajrae-mac-twm" = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         modules = [
           ./modules/mac.nix
@@ -207,6 +207,7 @@
           ./modules/general.nix
           ./modules/zsh.nix
           ./modules/emacs.nix
+          ({config,...}: { isServer = true; })
         ];
         pkgs = import nixpkgs {
           overlays = [ emacs-overlay.overlay ];

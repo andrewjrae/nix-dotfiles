@@ -19,27 +19,34 @@ in
     fd
     gnused
 
-    # Install emacs externally so we can manage the dotfiles manually
+    # Install doom emacs externally so we can manage the dotfiles manually
     # (this makes tinkering and installing doom much easier)
-    (if pkgs.stdenv.isDarwin
-      then emacs-mac
-      else emacs-tui)
+    (if config.isServer
+     then emacs-tui
+     else (if pkgs.stdenv.isDarwin
+           then emacs-mac
+           else emacs-gui))
 
     # :tools lookup & :lang org +roam
     sqlite
 
     # :lang (cc +lsp)
     ccls
+    #clang-tools
 
     # :lang org
-    (texlive.combine {
-      inherit (texlive)
-        scheme-medium
-        collection-latexextra
-        fontawesome5
-        roboto
-        latexmk;
-    })
+    (if config.isServer then
+      fd  # duplicate item
+     else
+       (texlive.combine {
+         inherit (texlive)
+           scheme-medium
+           collection-latexextra
+           fontawesome5
+           roboto
+           latexmk;
+       })
+    )
 
     # :checkers spell
     (aspellWithDicts (ds: with ds; [
@@ -47,14 +54,14 @@ in
     ]))
   ];
 
- # services.emacs = {
- #   enable = true;
- #   package = emacs-src;
- #   defaultEditor = true;
- # };
+  # services.emacs = {
+  #   enable = true;
+  #   package = emacs-src;
+  #   defaultEditor = true;
+  # };
 
   home.sessionPath = [ "$HOME/.emacs.d/bin" ];
 
- programs.zsh.shellAliases = { ecli = "TERM=xterm-24bit emacsclient -t"; };
+  programs.zsh.shellAliases = { ecli = "TERM=xterm-24bit emacsclient -t"; };
 
 }
