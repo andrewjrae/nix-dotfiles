@@ -81,6 +81,33 @@
         };
       };
 
+      nixosConfigurations = {
+        "garibaldi" = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ./hosts/garibaldi.nix
+            home-manager.darwinModule
+            {
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                users.ajrae = {
+                  imports = [
+                    ./users/ajrae/home.nix
+                    ./modules/home/standard.nix
+                  ];
+                };
+              };
+              nixpkgs = {
+                config.allowUnfree = true;
+                overlays = [ emacs-overlay.overlay ];
+              };
+            }
+          ];
+        };
+        };
+      };
+
       homeConfigurations = {
         "andrewr-dev" = let
           system = "x86_64-linux";
