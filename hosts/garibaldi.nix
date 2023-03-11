@@ -8,7 +8,7 @@
     };
 
     # load modules on boot
-    kernelModules = ["acpi_call" "amdgpu" "amd_pstate"];
+    # kernelModules = ["acpi_call" "amdgpu" "amd_pstate"];
 
     # use latest kernel
     kernelPackages = pkgs.linuxPackages_xanmod_latest;
@@ -50,10 +50,11 @@
   };
 
   programs = {
+    zsh.enable = true;
+    gnupg.agent.enable = true;
     # backlight control
     light.enable = true;
-
-    steam.enable = true;
+    # steam.enable = true;
   };
 
   services = {
