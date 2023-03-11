@@ -2,7 +2,7 @@
 
 {
   imports = [
-      ./general.nix
+      ./common.nix
       ./pass.nix
       ./zsh.nix
       ./fonts.nix

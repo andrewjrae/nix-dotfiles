@@ -32,7 +32,7 @@
         "ajrae-mac" = darwin.lib.darwinSystem {
           system = "aarch64-darwin";
           modules = [
-            ./modules/darwin/standard.nix
+            ./darwin/standard.nix
             home-manager.darwinModule
             {
               home-manager = {
@@ -40,8 +40,8 @@
                 useUserPackages = true;
                 users.ajrae = {
                   imports = [
-                    ./users/ajrae/home.nix
-                    ./modules/home/standard.nix
+                    ./home/users/ajrae
+                    ./home/standard.nix
                   ];
                 };
               };
@@ -55,8 +55,8 @@
         "ajrae-mac-twm" = darwin.lib.darwinSystem {
           system = "aarch64-darwin";
           modules = [
-            ./modules/darwin/standard.nix
-            ./modules/darwin/twm.nix
+            ./darwin/standard.nix
+            ./darwin/twm.nix
             home-manager.darwinModule
             {
               home-manager = {
@@ -64,8 +64,8 @@
                 useUserPackages = true;
                 users.ajrae = {
                   imports = [
-                    ./users/ajrae/home.nix
-                    ./modules/home/standard.nix
+                    ./home/users/ajrae
+                    ./home/standard.nix
                   ];
                 };
               };
@@ -93,8 +93,8 @@
                 useUserPackages = true;
                 users.ajrae = {
                   imports = [
-                    ./users/ajrae/home.nix
-                    ./modules/home/standard.nix
+                    ./home/users/ajrae
+                    ./home/standard.nix
                   ];
                 };
               };
@@ -105,7 +105,6 @@
             }
           ];
         };
-        };
       };
 
       homeConfigurations = {
@@ -113,8 +112,8 @@
           system = "x86_64-linux";
         in home-manager.lib.homeManagerConfiguration rec {
           modules = [
-            ./users/andrewr/home.nix
-            ./modules/general.nix
+            ./home/users/andrewr
+            ./modules/common.nix
             ./modules/zsh.nix
             ./modules/emacs.nix
             ({config,...}: { isServer = true; })
