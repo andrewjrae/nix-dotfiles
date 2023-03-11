@@ -6,7 +6,6 @@
     # Nix-Darwin
     darwin = {
       url = "github:LnL7/nix-darwin";
-      # url = "github:supermarin/nix-darwin/applications-collision";
       inputs.nixpkgs.follows = "unstable";
     };
     # HM-manager for dotfile/user management
@@ -85,8 +84,8 @@
         "garibaldi" = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           modules = [
-            ./hosts/garibaldi.nix
-            home-manager.darwinModule
+            ./hosts/garibaldi
+            home-manager.nixosModule
             {
               home-manager = {
                 useGlobalPkgs = true;
@@ -95,6 +94,7 @@
                   imports = [
                     ./home/users/ajrae
                     ./home/standard.nix
+                    ({home-manager,...}: { services.emacs.enable = true; })
                   ];
                 };
               };

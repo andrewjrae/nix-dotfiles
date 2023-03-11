@@ -1,7 +1,8 @@
 { config, lib, pkgs, home-manager, inputs,... }:
 
 let
-  emacs-gui = with pkgs; ((emacsPackagesFor emacsPgtkNativeComp).emacsWithPackages (epkgs: [
+  #emacs-gui = with pkgs; ((emacsPackagesFor emacsPgtkNativeComp).emacsWithPackages (epkgs: [
+  emacs-gui = with pkgs; ((emacsPackagesFor emacsNativeComp).emacsWithPackages (epkgs: [
     epkgs.vterm
     epkgs.pdf-tools
     epkgs.org-pdftools
@@ -68,6 +69,7 @@ in
 
   home.sessionPath = [ "$HOME/.emacs.d/bin" ];
 
-  programs.zsh.shellAliases = { ecli = "TERM=xterm-24bit emacsclient -t"; };
+  # programs.zsh.shellAliases = { ecli = "TERM=xterm-24bit emacsclient -t"; };
+  programs.zsh.shellAliases = { ecli = "emacsclient -t"; };
 
 }
