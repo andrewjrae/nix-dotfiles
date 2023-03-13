@@ -12,4 +12,6 @@
       extraConfig.pull.rebase = true;
       extraConfig.init.defaultBranch = "development";
     };
+
+  programs.zsh.shellAliases = { ecli = "TERM=alacritty-direct emacsclient -t"; };
 }

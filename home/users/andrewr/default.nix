@@ -30,4 +30,6 @@
       extraConfig.pull.rebase = true;
       extraConfig.push.default = "simple";
     };
+
+  programs.zsh.shellAliases = { ecli = "TERM=xterm-24bit emacsclient -t"; };
 }

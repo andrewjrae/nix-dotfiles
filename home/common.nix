@@ -15,9 +15,14 @@
       fd
       htop
       libqalculate
-      #xclip
-      #fsearch
-    ];
+      wget
+    ]
+    ++
+    (if pkgs.stdenv.isDarwin
+     then []
+     else [
+       gptfdisk
+     ]);
 
     # Let Home Manager install and manage itself.
     programs.home-manager.enable = true;
