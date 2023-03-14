@@ -1,0 +1,20 @@
+# Import the base config
+import:
+  - /Users/ajrae/.config/alacritty/base_config.yml
+
+window:
+  # Window decorations
+  #
+  # Values for `decorations`:
+  #     - full: Borders and title bar
+  #     - none: Neither borders nor title bar
+  #
+  # Values for `decorations` (macOS only):
+  #     - transparent: Title bar, transparent background and title bar buttons
+  #     - buttonless: Title bar, transparent background, but no title bar buttons
+  decorations: buttonless
+
+bell:
+  command:
+    program: osascript
+    args: ["-e", "beep"]

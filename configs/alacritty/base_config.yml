@@ -11,7 +11,7 @@ env:
   # check the local terminfo database and use `alacritty` if it is
   # available, otherwise `xterm-256color` is used.
   TERM: xterm-256color
-  WINIT_X11_SCALE_FACTOR: "0.9"
+  WINIT_X11_SCALE_FACTOR: "0.90"
 
 window:
   # Window dimensions (changes require restart)
@@ -40,17 +40,6 @@ window:
 
   # Spread additional padding evenly around the terminal content.
   #dynamic_padding: false
-
-  # Window decorations
-  #
-  # Values for `decorations`:
-  #     - full: Borders and title bar
-  #     - none: Neither borders nor title bar
-  #
-  # Values for `decorations` (macOS only):
-  #     - transparent: Title bar, transparent background and title bar buttons
-  #     - buttonless: Title bar, transparent background, but no title bar buttons
-  decorations: buttonless
 
   # Startup Mode (changes require restart)
   #
@@ -281,11 +270,6 @@ schemes:
       white:   '#dfdfdf' # base2
 
 colors: *doom-one
-
-bell:
-  command:
-    program: osascript
-    args: ["-e", "beep"]
 
 # Visual Bell
 #
