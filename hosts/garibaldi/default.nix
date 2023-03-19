@@ -10,10 +10,30 @@
       ./hardware-configuration.nix
     ];
 
+  boot.kernelParams = ["acpi_rev_override=1"];
+
   # Bootloader.
-  boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot = {
+    enable = true;
+    configurationLimit = 7;
+  };
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
+
+  nix = {
+    settings = {
+      # Enable flakes and new 'nix' command
+      experimental-features = "nix-command flakes";
+      # Deduplicate and optimize nix store
+      auto-optimise-store = true;
+    };
+    # automatic garbage collection
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 20d";
+    };
+  };
 
   networking.hostName = "garibaldi";
 
@@ -35,7 +55,29 @@
   services.xserver = {
     layout = "us";
     xkbVariant = "";
+    videoDrivers = [ "intel" ];
+    deviceSection = ''
+      Option "DRI" "2"
+      Option "TearFree" "true"
+    '';
+    libinput = {
+      enable = true;
+      touchpad = {
+        naturalScrolling = true;
+        disableWhileTyping = true;
+      };
+    };
   };
+
+  hardware.opengl.enable = true; # the rest of opengl config comes from nixos-hardware
+
+  hardware.bluetooth = {
+    enable = true;
+    # battery info support
+    package = pkgs.bluez5-experimental;
+  };
+
+  services.blueman.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.ajrae = {
@@ -89,6 +131,15 @@
   # networking.firewall.enable = false;
 
   environment.enableAllTerminfo = true;
+
+  # Enable sound.
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

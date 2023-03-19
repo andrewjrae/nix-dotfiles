@@ -29,6 +29,7 @@ in
     (ripgrep.override {withPCRE2 = true;})
     fd
     gnused
+    emacs-all-the-icons-fonts
 
     # Install doom emacs externally so we can manage the dotfiles manually
     # (this makes tinkering and installing doom much easier)

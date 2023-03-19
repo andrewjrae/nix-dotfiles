@@ -3,6 +3,8 @@
 
   inputs = {
     unstable.url = "github:nixos/nixpkgs/master";
+
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     # Nix-Darwin
     darwin = {
       url = "github:LnL7/nix-darwin";
@@ -85,6 +87,8 @@
           system = "x86_64-linux";
           modules = [
             ./hosts/garibaldi
+            ./nixos/xmonad.nix
+            nixos-hardware.nixosModules.dell-xps-15-9560-intel
             home-manager.nixosModule
             {
               home-manager = {
@@ -94,6 +98,7 @@
                   imports = [
                     ./home/users/ajrae
                     ./home/standard.nix
+                    ./home/twm.nix
                     ({home-manager,...}: { services.emacs.enable = true; })
                   ];
                 };
