@@ -11,6 +11,8 @@
     ];
 
   boot.kernelParams = ["acpi_rev_override=1"];
+  boot.kernelModules = ["acpi_call"];
+  boot.extraModulePackages = with config.boot.kernelPackages; [ acpi_call ];
 
   # Bootloader.
   boot.loader.systemd-boot = {
@@ -67,6 +69,7 @@
         disableWhileTyping = true;
       };
     };
+    desktopManager.wallpaper.mode = "fill";
   };
 
   hardware.opengl.enable = true; # the rest of opengl config comes from nixos-hardware
@@ -76,8 +79,6 @@
     # battery info support
     package = pkgs.bluez5-experimental;
   };
-
-  services.blueman.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.ajrae = {
@@ -92,16 +93,11 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  # programs.mtr.enable = true;
-  programs.gnupg.agent = {
-    enable = true;
-    enableSSHSupport = true;
-  };
-
   # home manager does the rest, but this is needed for everything to work
   programs.zsh.enable = true;
+
+  # allows for gtk themeing from home-manager
+  programs.dconf.enable = true;
 
   # List services that you want to enable:
 
@@ -131,6 +127,10 @@
   # networking.firewall.enable = false;
 
   environment.enableAllTerminfo = true;
+  environment.systemPackages = with pkgs; [
+    killall
+    powertop
+  ];
 
   # Enable sound.
   security.rtkit.enable = true;
@@ -140,6 +140,9 @@
     alsa.support32Bit = true;
     pulse.enable = true;
   };
+
+  # Enable upower
+  services.upower.enable = true;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

@@ -42,6 +42,13 @@ in
     ccls
     #clang-tools
 
+    # :lang (rust +lsp)
+    rustc
+    cargo
+    rustfmt
+    rust-analyzer
+    clippy
+
     # :checkers spell
     (aspellWithDicts (ds: with ds; [
       en en-computers en-science

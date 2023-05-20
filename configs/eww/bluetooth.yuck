@@ -1,0 +1,28 @@
+(defpoll bluetooth-info :initial '{"enabled": false}' :interval "2s" "scripts/bluetooth")
+(defvar reveal-bluetooth false)
+
+;; wifi widgets and polling
+;; (defwidget bluetooth []
+;;     (eventbox :onhover "${EWW_CMD} update reveal-bluetooth=true"
+;;               :onhoverlost "${EWW_CMD} update reveal-bluetooth=false"
+;;         (box :orientation "h"
+;;             :class "bluetooth"
+;;             :space-evenly false
+;;             (box :class "label"
+;;                 {bluetooth-info.enabled ? "" : ""})
+;;     (popover :direction "bottom"
+;;             :open reveal-bluetooth
+;;             :class "bluetooth-devices"
+;;         (box :orientation "v"
+;;             (for dev in {bluetooth-info.devices}
+;;                 (eventbox :halign "start"
+;;                     :class "bluetooth-device"
+;;                 {dev.name})))))))
+
+(defwidget bluetooth []
+        (box :orientation "h"
+            :class "bluetooth"
+            :space-evenly false
+            (button :class "label"
+            :onclick "blueberry"
+                {bluetooth-info.enabled ? "" : ""})))

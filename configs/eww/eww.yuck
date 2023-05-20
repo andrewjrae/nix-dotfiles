@@ -1,0 +1,42 @@
+(include "./common.yuck")
+(include "./bluetooth.yuck")
+(include "./wifi.yuck")
+
+(defwidget bar []
+  (centerbox :orientation "h"
+    (workspaces :focus-cmd "wmctrl -s")
+    (music)
+    (sidestuff)))
+
+(defwidget sidestuff []
+  (box :class "sidestuff" :orientation "h" :space-evenly false :halign "end"
+    (vol)
+    (cpu)
+    (ram)
+    (bat)
+    (bluetooth)
+    (wifi)
+    (box :class "time" time)))
+
+(defwidget music []
+  (box :class "music"
+       :orientation "h"
+       :space-evenly false
+       :halign "center"
+    {music != "" ? "${music}" : ""}))
+
+(deflisten music :initial ""
+  "playerctl --follow metadata --format '{{ artist }} - {{ title }}' || true")
+
+(defpoll time :interval "10s"
+  "date '+%H:%M %b %d, %Y'")
+
+(defwindow bar
+  :monitor 0
+  :windowtype "dock"
+  :geometry (geometry :x "0"
+                      :y "4px"
+                      :width "99%"
+                      :height "30px"
+                      :anchor "top center")
+  (bar))

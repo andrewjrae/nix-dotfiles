@@ -1,0 +1,22 @@
+#!/usr/bin/env sh
+
+list_dev_info() {
+    connected_devs=$(bluetoothctl devices Connected | cut -d ' ' -f 2)
+    for dev in $connected_devs; do
+        info=$(bluetoothctl info "$dev")
+        alias=$(echo "$info" | grep "Alias" | cut -d ' ' -f 2-)
+        name=$(echo "$info" | grep "Name" | cut -d ' ' -f 2-)
+        bat_level=$(upower -d \
+            | grep "$name" -A 12 \
+            | grep percentage \
+            | sed 's/.*percentage:\s*\([0-9]\+\)\%/\1/')
+        echo "{\"name\":\"$alias\", \"bat_level\":${bat_level:="null"}}"
+    done
+}
+
+if bluetoothctl show | grep -q "Powered: yes"; then
+    dev_info=$(list_dev_info | sed '$!s/$/,/' | tr '\n' ' ')
+    echo "{\"enabled\": true, \"devices\":[$dev_info]}"
+else
+    echo "{\"enabled\": false, \"devices\":[]}"
+fi

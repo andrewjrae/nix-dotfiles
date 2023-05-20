@@ -1,0 +1,108 @@
+;; reveal variables for the metric widgets
+(defvar reveal-vol false)
+(defvar reveal-cpu false)
+(defvar reveal-ram false)
+(defvar reveal-bat false)
+
+(defpoll volume :interval "1s" :initial 0
+    "scripts/getvol")
+
+(defwidget metric [label name var value ?color]
+    (eventbox :onhover "${EWW_CMD} update reveal-${name}=true"
+              :onhoverlost "${EWW_CMD} update reveal-${name}=false"
+    (box :orientation "h"
+         :class "metric-${name}"
+         :space-evenly false
+        (box :class "label" label)
+        (revealer :style {color != "" ? "color: ${color}" : ""}
+                  :transition "none"
+                  :reveal {!var}
+                  :duration "250ms"
+                (circular-progress :style "background-color: #3f444a"
+                                   :value value
+                                   :thickness 8))
+        (revealer :style {color != "" ? "color: ${color}" : ""}
+                  :transition "slideleft"
+                  :reveal var
+                  :duration "250ms"
+            (children :nth 0)))))
+
+(defwidget graph-metric [value time-range var]
+    (graph :valign "center"
+           :value value
+           :width {var ? 50 : 30}
+           :height 24
+           :time-range time-range
+           :min 0
+           :max 100
+           ;; :dynamic "true"
+           :line-style "round"
+           :thickness 3))
+
+
+(defwidget scale-metric [value var ?onchange]
+    (scale :class "scale-metric"
+           :min 0
+           :max 100
+           :width {var ? 50 : 30}
+           :active {onchange != ""}
+           :value value
+           :onchange onchange))
+
+(deflisten spaces :initial '[]' "scripts/workspaces")
+(defwidget workspaces [focus-cmd]
+    (box :class "workspaces"
+         :orientation "h"
+         :space-evenly true
+         :halign "start"
+         :spacing 10
+        (for space in spaces
+            (button :onclick "${focus-cmd} ${space.id}"
+                    :class {space.f == 1 ? "space-focused" : "space-unfocused"}
+                {space.f == 1 ? "" : ""}))))
+
+(defwidget bat []
+    (metric :label {EWW_BATTERY.BAT0.status == "Charging" ? "" :
+                    EWW_BATTERY.BAT0.capacity > 80 ? "" :
+                    EWW_BATTERY.BAT0.capacity > 60 ? "" :
+                    EWW_BATTERY.BAT0.capacity > 40 ? "" :
+                    EWW_BATTERY.BAT0.capacity > 20 ? "" :
+                                                     ""}
+            :name "bat"
+            :var reveal-bat
+            :value {EWW_BATTERY.BAT0.capacity}
+            :color {EWW_BATTERY.BAT0.capacity > 60 ? "#98be65" :
+                    EWW_BATTERY.BAT0.capacity > 20 ? "#ecbe7b" :
+                                                     "#ff6c6b"}
+            (graph-metric :value {EWW_BATTERY.BAT0.capacity}
+                          :var reveal-bat
+                          :time-range "1h")))
+
+(defwidget ram []
+    (metric :label ""
+            :name "ram"
+            :var reveal-ram
+            :value {EWW_RAM.used_mem_perc}
+            :color "#51afef"
+            (graph-metric :value {EWW_RAM.used_mem_perc}
+                          :var reveal-ram
+                          :time-range "120s")))
+
+(defwidget cpu []
+    (metric :label ""
+            :name "cpu"
+            :var reveal-cpu
+            :value {EWW_CPU.avg}
+            :color "#da8548"
+            (graph-metric :value {EWW_CPU.avg}
+                          :var reveal-cpu
+                          :time-range "30s")))
+
+(defwidget vol []
+    (metric :label {volume > 0 ? "" : ""}
+            :name "vol"
+            :var reveal-vol
+            :value volume
+            (scale-metric :value volume
+                          :var reveal-vol
+                          :onchange "amixer sset Master {}%")))

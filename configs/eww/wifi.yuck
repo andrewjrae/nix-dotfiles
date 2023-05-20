@@ -1,0 +1,19 @@
+(defpoll wifi-ssid :interval "2s" "nmcli c | grep wlp2s0 | awk '{print ($1)}'")
+(defpoll wifi-connected :initial "disconnected"
+    :interval "2s" "nmcli g | grep -oE '(dis)?connected'")
+(defvar reveal-wifi false)
+
+;; wifi widgets and polling
+(defwidget wifi []
+    (eventbox :onhover "${EWW_CMD} update reveal-wifi=true"
+              :onhoverlost "${EWW_CMD} update reveal-wifi=false"
+    (box :orientation "h"
+         :class "wifi"
+         :space-evenly false
+        (box :class "wifi-label"
+             :style 'color: ${wifi-connected == "disconnected" ? "#ff6c6b" : "#bbc2cf"}'
+            {wifi-connected == "disconnected" ? "" : ""})
+        (revealer :transition "slideleft"
+                  :reveal reveal-wifi
+                  :duration "250ms"
+        (box :class "wifi-ssid" wifi-ssid)))))

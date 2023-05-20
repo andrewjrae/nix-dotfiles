@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+
+xworkspaces() {
+    json_spaces_list=$(wmctrl -d \
+        | sed 's/^\([0-9]\).*\([-|\*]\).*$/{"id":\1, "f":\2}/' \
+        | sed 's/-/0/' \
+        | sed 's/\*/1/' \
+        | sed '$!s/$/,/' \
+        | tr '\n' ' ')
+    echo "[${json_spaces_list}]"
+}
+
+xprop -spy -root _NET_CURRENT_DESKTOP | while read -r _ ; do
+    xworkspaces
+done

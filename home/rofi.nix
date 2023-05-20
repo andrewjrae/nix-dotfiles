@@ -1,11 +1,37 @@
 { config, lib, pkgs, ... }:
 
-{
+let
+  pinentryRofi = pkgs.writeShellApplication {
+    name= "pinentry-rofi-with-env";
+    text = ''
+      PATH="$PATH:${pkgs.coreutils}/bin:${pkgs.rofi}/bin"
+      "${pkgs.pinentry-rofi}/bin/pinentry-rofi" "$@"
+    '';
+  };
+in {
+  home.packages = with pkgs; [
+    pinentry-rofi
+  ];
+  programs.gpg.enable = true;
+  services.gpg-agent = {
+    enable = true;
+    enableZshIntegration = true;
+    defaultCacheTtl = 259200;
+    maxCacheTtl = 31557600;
+    pinentryFlavor = null;
+    extraConfig = ''
+      pinentry-program ${pinentryRofi}/bin/pinentry-rofi-with-env
+    '';
+  };
+
   programs.rofi = {
     enable = true;
     pass = {
       enable = true;
       stores = [ "$HOME/.password-store" ];
+      extraConfig = ''
+        help_color="#a9a1e1"
+      '';
     };
     # ported theme from rasi config
     theme = let

@@ -1,0 +1,86 @@
+@import "colors.scss";
+
+* {
+  all: unset; // Unsets everything so you can style everything from scratch
+}
+
+//Global Styles
+.bar {
+  padding: 10px;
+  font-family: Fira Sans;
+  font-family: Fira Code;
+  // background-color: $bg;
+  // color: $fg;
+  // border-radius: 7px;
+  // border-color: $grey;
+  // border-width: 1px;
+  // border-style: solid;
+}
+
+// Styles on classes (see eww.yuck for more information)
+
+.time {
+  margin-left: 15px;
+  margin-right: 15px;
+}
+.sidestuff slider {
+  all: unset;
+  // color: #ffd5cd;
+}
+.metric-vol circular-progress {
+  all: unset;
+  color: $violet;
+}
+.metric-vol scale trough highlight {
+  all: unset;
+  background-color:$violet;
+  border-radius: 50px;
+}
+.scale-metric trough {
+  all: unset;
+  background-color: $grey;
+  border-radius: 50px;
+  min-height: 8px;
+  min-width: 30px;
+}
+
+.label {
+  font-family: "Font Awesome 6 Free Solid";
+  font-size: large;
+  margin-right: 10px;
+  margin-left: 15px;
+}
+
+.wifi-label {
+  all: unset;
+  font-family: "Font Awesome 6 Free Solid";
+  font-size: large;
+  margin-left: 5px;
+}
+.wifi-ssid {
+  margin-left: 10px;
+}
+
+.workspaces {
+  all: unset;
+  font-family: "Font Awesome 6 Free Solid";
+  margin-right: 15px;
+  margin-left: 15px;
+}
+.space-focused {
+  color: $magenta;
+}
+.workspaces button:hover {
+  color: $blue;
+}
+
+.music {
+  margin-right: 15px;
+  margin-left: 15px;
+}
+
+.bluetooth-devices {
+  background-color: $grey;
+  min-height: 100px;
+  min-width: 100px;
+}
