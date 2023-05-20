@@ -66,6 +66,7 @@ in
          fontawesome5
          roboto
          latexmk;})
+      graphviz
       pandoc]
   );
 
