@@ -2,7 +2,7 @@
 {
   imports = [
     ./rofi.nix
-    ./spicetify.nix
+    # ./spicetify.nix
   ];
   # Various packages required by my xmonad config
   home.packages = with pkgs; [
