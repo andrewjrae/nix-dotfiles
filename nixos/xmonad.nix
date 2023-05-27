@@ -3,9 +3,27 @@
 {
   # Enable the X11 windowing system.
   services.autorandr.enable = true;
+
+  # Configure keymap in X11
   services.xserver = {
     enable = true;
-    autorun = true;
+    autorun = false;
+    exportConfiguration = true;
+
+    layout = "us";
+    xkbVariant = "";
+    videoDrivers = [ "intel" ];
+    deviceSection = ''
+      Option "DRI" "2"
+      Option "TearFree" "true"
+    '';
+    libinput = {
+      enable = true;
+      touchpad = {
+        naturalScrolling = true;
+        disableWhileTyping = true;
+      };
+    };
 
     # videoDrivers = [ "nvidia" ];
     windowManager = {
@@ -19,15 +37,7 @@
     };
     displayManager = {
       defaultSession = "none+xmonad";
-      lightdm = {
-        greeters.enso = {
-          enable = true;
-          blur = true;
-          # extraConfig = ''
-          #   default-wallpaper=/usr/share/streets_of_gruvbox.png
-          # '';
-        };
-      };
+      startx.enable = true;
     };
   };
 }

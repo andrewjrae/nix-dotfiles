@@ -1,21 +1,24 @@
 { config, lib, pkgs, ... }:
+
 {
   imports = [
     ./rofi.nix
-    # ./spicetify.nix
+    ./spicetify.nix
   ];
-  # Various packages required by my xmonad config
+
+  home.file.".background-image".source = ../configs/background-image;
+
+  # Various packages required by both my TWM configs
   home.packages = with pkgs; [
     firefox
     blueberry
-    wmctrl
-    eww
     alsa-utils
     playerctl
     flameshot
-    escrotum
     pavucontrol
     btop
+    vim
+    brightnessctl
   ];
   services.recoll = {
     enable = true;
@@ -25,14 +28,7 @@
       topdirs = [ "~/" ];
     };
   };
-  services.picom = {
-    enable = true;
-    settings = {
-      corner-radius = 5;
-    };
-  };
   services.playerctld.enable = true;
-  services.unclutter.enable = true;
   gtk = {
     enable = true;
     font.name = "Fira Sans";
@@ -41,8 +37,9 @@
       package = pkgs.colloid-gtk-theme;
     };
   };
-  # programs.eww = {
-  #   enable = true;
-  #   configDir = ../configs/eww;
-  # };
+  programs.eww = {
+    enable = true;
+    package = pkgs.eww-wayland;
+    configDir = ../configs/eww;
+  };
 }

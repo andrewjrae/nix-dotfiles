@@ -2,7 +2,7 @@
 
 let
   #emacs-gui = with pkgs; ((emacsPackagesFor emacsPgtkNativeComp).emacsWithPackages (epkgs: [
-  emacs-gui = with pkgs; ((emacsPackagesFor emacsNativeComp).emacsWithPackages (epkgs: [
+  emacs-gui = with pkgs; ((emacsPackagesFor emacsPgtk).emacsWithPackages (epkgs: [
     epkgs.vterm
     epkgs.pdf-tools
     epkgs.org-pdftools

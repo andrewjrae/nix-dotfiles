@@ -26,6 +26,7 @@ in {
 
   programs.rofi = {
     enable = true;
+    package = pkgs.rofi-wayland;
     pass = {
       enable = true;
       stores = [ "$HOME/.password-store" ];

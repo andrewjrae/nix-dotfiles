@@ -58,8 +58,8 @@
          :spacing 10
         (for space in spaces
             (button :onclick "${focus-cmd} ${space.id}"
-                    :class {space.f == 1 ? "space-focused" : "space-unfocused"}
-                {space.f == 1 ? "" : ""}))))
+                    :class {space.f ? "space-focused" : "space-unfocused"}
+                {space.f ? "" : ""}))))
 
 (defwidget bat []
     (metric :label {EWW_BATTERY.BAT0.status == "Charging" ? "" :

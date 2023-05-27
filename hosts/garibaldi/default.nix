@@ -8,6 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ../../nixos/common.nix
     ];
 
   boot.kernelParams = ["acpi_rev_override=1"];
@@ -52,25 +53,6 @@
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_CA.UTF-8";
-
-  # Configure keymap in X11
-  services.xserver = {
-    layout = "us";
-    xkbVariant = "";
-    videoDrivers = [ "intel" ];
-    deviceSection = ''
-      Option "DRI" "2"
-      Option "TearFree" "true"
-    '';
-    libinput = {
-      enable = true;
-      touchpad = {
-        naturalScrolling = true;
-        disableWhileTyping = true;
-      };
-    };
-    desktopManager.wallpaper.mode = "fill";
-  };
 
   hardware.opengl.enable = true; # the rest of opengl config comes from nixos-hardware
 
@@ -143,6 +125,17 @@
 
   # Enable upower
   services.upower.enable = true;
+
+  # Greetd for login
+  services.greetd = {
+    enable = true;
+    settings = {
+      default_session = {
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --remember --remember-session --cmd ${config.wmCmd}";
+        user = "greeter";
+      };
+    };
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

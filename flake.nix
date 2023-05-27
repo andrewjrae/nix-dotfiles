@@ -25,6 +25,8 @@
       url = "github:nix-community/emacs-overlay";
       inputs.nixpkgs.follows = "unstable";
     };
+    # hyprland!
+    hyprland.url = "github:hyprwm/Hyprland";
   };
 
   outputs = { self, nixpkgs, darwin, home-manager, ... }@inputs:
@@ -88,6 +90,8 @@
           modules = [
             ./hosts/garibaldi
             ./nixos/xmonad.nix
+            ./nixos/hyprland.nix
+            hyprland.nixosModules.default
             nixos-hardware.nixosModules.dell-xps-15-9560-intel
             home-manager.nixosModule
             {
@@ -98,7 +102,9 @@
                   imports = [
                     ./home/users/ajrae
                     ./home/standard.nix
-                    ./home/twm.nix
+                    ./home/xmonad.nix
+                    ./home/hyprland.nix
+                    hyprland.homeManagerModules.default
                     ({home-manager,...}: { services.emacs.enable = true; })
                   ];
                 };

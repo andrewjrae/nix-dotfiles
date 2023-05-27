@@ -7,10 +7,6 @@
       type = bool;
       default = false;
     };
-    isWayland = mkOption {
-      type = bool;
-      default = false;
-    };
   };
 
   config = {
