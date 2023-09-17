@@ -2,8 +2,11 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, inputs,... }:
 
+let
+  channelsPath = "channels/nixpkgs";
+in
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -12,13 +15,13 @@
     ];
 
   boot.kernelParams = ["acpi_rev_override=1"];
-  boot.kernelModules = ["acpi_call"];
-  boot.extraModulePackages = with config.boot.kernelPackages; [ acpi_call ];
+  boot.kernelModules = [ "acpi_call" "i2c-dev" "ddcci_backlight" ];
+  boot.extraModulePackages = with config.boot.kernelPackages; [ acpi_call ddcci-driver ];
 
   # Bootloader.
   boot.loader.systemd-boot = {
     enable = true;
-    configurationLimit = 7;
+    configurationLimit = 5;
   };
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
@@ -36,7 +39,9 @@
       dates = "weekly";
       options = "--delete-older-than 20d";
     };
+    nixPath = [ "nixpkgs=/etc/${channelsPath}" ];
   };
+  environment.etc."${channelsPath}".source = inputs.unstable.outPath;
 
   networking.hostName = "garibaldi";
 
@@ -62,10 +67,14 @@
     package = pkgs.bluez5-experimental;
   };
 
+  # Auto mount usb devices
+  services.devmon.enable = true;
+  services.gvfs.enable = true;
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.ajrae = {
     isNormalUser = true;
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "docker"];
     openssh.authorizedKeys.keys = [
       # TODO: migrate keys to here
     ];
@@ -125,6 +134,9 @@
 
   # Enable upower
   services.upower.enable = true;
+
+  # docker
+  virtualisation.docker.enable = true;
 
   # Greetd for login
   services.greetd = {

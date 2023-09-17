@@ -15,9 +15,6 @@ in {
   programs.gpg.enable = true;
   services.gpg-agent = {
     enable = true;
-    enableZshIntegration = true;
-    defaultCacheTtl = 259200;
-    maxCacheTtl = 31557600;
     pinentryFlavor = null;
     extraConfig = ''
       pinentry-program ${pinentryRofi}/bin/pinentry-rofi-with-env

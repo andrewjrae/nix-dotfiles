@@ -2,7 +2,7 @@
   description = "Andrew's Nix Environment";
 
   inputs = {
-    unstable.url = "github:nixos/nixpkgs/master";
+    unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     # Nix-Darwin
@@ -27,16 +27,25 @@
     };
     # hyprland!
     hyprland.url = "github:hyprwm/Hyprland";
+    eww = {
+      url = "github:elkowar/eww";
+      inputs.nixpkgs.follows = "unstable";
+      inputs.rust-overlay.follows = "rust-overlay";
+    };
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
+      inputs.nixpkgs.follows = "unstable";
+    };
   };
 
   outputs = { self, nixpkgs, darwin, home-manager, ... }@inputs:
-    with inputs; {
+     {
       darwinConfigurations = {
         "ajrae-mac" = darwin.lib.darwinSystem {
           system = "aarch64-darwin";
           modules = [
             ./darwin/standard.nix
-            home-manager.darwinModule
+            inputs.home-manager.darwinModule
             {
               home-manager = {
                 useGlobalPkgs = true;
@@ -50,7 +59,7 @@
               };
               nixpkgs = {
                 config.allowUnfree = true;
-                overlays = [ emacs-overlay.overlay ];
+                overlays = [ inputs.emacs-overlay.overlay ];
               };
             }
           ];
@@ -60,7 +69,7 @@
           modules = [
             ./darwin/standard.nix
             ./darwin/twm.nix
-            home-manager.darwinModule
+            inputs.home-manager.darwinModule
             {
               home-manager = {
                 useGlobalPkgs = true;
@@ -75,8 +84,8 @@
               nixpkgs = {
                 config.allowUnfree = true;
                 overlays = [
-                  emacs-overlay.overlay
-                  spacebar.overlay
+                  inputs.emacs-overlay.overlay
+                  inputs.spacebar.overlay
                 ];
               };
             }
@@ -89,39 +98,45 @@
           system = "x86_64-linux";
           modules = [
             ./hosts/garibaldi
-            ./nixos/xmonad.nix
+            # ./nixos/xmonad.nix
             ./nixos/hyprland.nix
-            hyprland.nixosModules.default
-            nixos-hardware.nixosModules.dell-xps-15-9560-intel
-            home-manager.nixosModule
+            inputs.hyprland.nixosModules.default
+            inputs.nixos-hardware.nixosModules.dell-xps-15-9560-intel
+            inputs.home-manager.nixosModule
             {
               home-manager = {
+                extraSpecialArgs = { inherit inputs; };
                 useGlobalPkgs = true;
                 useUserPackages = true;
                 users.ajrae = {
                   imports = [
                     ./home/users/ajrae
                     ./home/standard.nix
-                    ./home/xmonad.nix
+                    # ./home/xmonad.nix
                     ./home/hyprland.nix
-                    hyprland.homeManagerModules.default
+                    inputs.hyprland.homeManagerModules.default
                     ({home-manager,...}: { services.emacs.enable = true; })
                   ];
                 };
               };
               nixpkgs = {
                 config.allowUnfree = true;
-                overlays = [ emacs-overlay.overlay ];
+                overlays = [
+                  inputs.emacs-overlay.overlay
+                  inputs.eww.overlays.default
+                  inputs.rust-overlay.overlays.default
+                ];
               };
             }
           ];
+          specialArgs = { inherit inputs; };
         };
       };
 
       homeConfigurations = {
         "andrewr-dev" = let
           system = "x86_64-linux";
-        in home-manager.lib.homeManagerConfiguration rec {
+        in inputs.home-manager.lib.homeManagerConfiguration rec {
           modules = [
             ./home/users/andrewr
             ./modules/common.nix
@@ -130,7 +145,7 @@
             ({config,...}: { isServer = true; })
           ];
           pkgs = import nixpkgs {
-            overlays = [ emacs-overlay.overlay ];
+            overlays = [ inputs.emacs-overlay.overlay ];
             inherit system;
           };
         };

@@ -1,6 +1,12 @@
 { config, lib, pkgs, ... }:
 
 {
+  services.gpg-agent = {
+    enable = true;
+    enableZshIntegration = true;
+    defaultCacheTtl = 259200;
+    maxCacheTtl = 31557600;
+  };
   programs.gpg.enable = true;
   programs.password-store = {
     enable = true;
@@ -9,7 +15,4 @@
       PASSWORD_STORE_CLIP_TIME = "60";
     };
   };
-  # passff-host is only actually setup for linux
-  # it uses the wrong paths for macos
-  # home.packages =  [ pkgs.passff-host ];
 }

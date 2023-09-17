@@ -19,6 +19,7 @@
     btop
     vim
     brightnessctl
+    xfce.thunar
   ];
   services.recoll = {
     enable = true;
@@ -35,6 +36,10 @@
     theme = {
       name = "Colloid-Dark";
       package = pkgs.colloid-gtk-theme;
+    };
+    iconTheme = {
+      name = "Numix-Circle";
+      package = pkgs.numix-icon-theme-circle;
     };
   };
   programs.eww = {

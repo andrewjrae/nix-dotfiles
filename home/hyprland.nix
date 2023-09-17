@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
 {
   imports = [
@@ -10,10 +10,15 @@
     mako
     socat
     jaq
+    grim
+    slurp
+    wl-clipboard
+    tessen
   ];
 
   wayland.windowManager.hyprland = {
     enable = true;
+    package = inputs.hyprland.packages.${pkgs.system}.hyprland;
     extraConfig = ''
       # ----- setup -----
       env = XDG_CURRENT_DESKTOP, Hyprland
@@ -37,6 +42,11 @@
       master {
             new_is_master = true
             new_on_top = true
+            orientation = center
+      }
+      binds {
+            # this makes workspace previous work as expected
+            allow_workspace_cycles = true
       }
       # decorations
       decoration {
@@ -81,7 +91,9 @@
       bind = SUPER, s, exec, rofi -show ssh
       bind = SUPER, w, exec, rofi -show windows
       bind = SUPER, o, exec, emacsclient -e '(emacs-run-recoll)'
-      bind = SUPER, p, exec, rofi-pass
+      bind = SUPER, p, exec, tessen -d rofi
+      # exit
+      bind = SHIFT SUPER, q, exec, hyprctl dispatch exit
       # window misc
       bind = SUPER, x, killactive
       bind = SUPER, f, fullscreen, 1
@@ -134,6 +146,9 @@
       bind =, xf86audionext, exec, playerctl next
       bind =, xf86audioprev, exec, playerctl previous
       bind =, xf86audiostop, exec, playerctl stop
+      # screenshots
+      bind =, Print, exec, grim -g "$(slurp)" - | wl-copy -t image/png
+      bind = SHIFT CTRL, PRINT, exec, grim -g "$(slurp)" - | wl-copy -t image/png
       # ----- animations -----
       animation = windows, 1, 8, default, popin
       animation = windowsMove, 0, 8, default
@@ -142,7 +157,7 @@
       # ----- monitor configs -----
       $laptopMonitor = eDP-1, preferred, 1920x0, 1
       monitor = $laptopMonitor
-      monitor = HDMI-A-1, preferred, 0x0, 1
+      monitor = desc:PXO Pixio PXC348C, 3440x1440@30, 0x0, 1
       bindl =, switch:off:Lid Switch, exec, hyprctl keyword monitor "$laptopMonitor"
       bindl =, switch:on:Lid Switch, exec, ~/.config/hypr/lidswitch.sh
       # ----- window rules -----
