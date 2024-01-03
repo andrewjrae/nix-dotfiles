@@ -8,5 +8,6 @@
       ./fonts.nix
       ./emacs.nix
       ./alacritty.nix
+      ./wezterm.nix
   ];
 }

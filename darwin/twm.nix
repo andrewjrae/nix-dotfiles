@@ -42,7 +42,7 @@
      yabai -m rule --add app=emacsclient manage=on
      yabai -m rule --add app=emacs manage=on
      yabai -m rule --add app=Emacs manage=on
-     yabai -m rule --add app='Alacritty' manage=on
+     yabai -m rule --add app=WezTerm manage=on
      yabai -m rule --add app='Firefox' manage=on
      yabai -m rule --add app='System Preferences' manage=off
      yabai -m rule --add app='Spotlight' manage=off
@@ -51,6 +51,7 @@
      yabai -m rule --add app='Finder' manage=off
      yabai -m rule --add app='Microsoft Teams' manage=off
      yabai -m rule --add app='zoom.us' manage=off
+     yabai -m rule --add title='floating-qalc' manage=off
      yabai -m signal --add event=space_changed action='echo $YABAI_RECENT_SPACE_ID > /tmp/yabai-last-space' active=yes
    '';
  };
@@ -65,6 +66,7 @@
         ''[
              "Alacritty" ~
              "emacs" ~
+             "wezterm" ~
              * : ${passthru key}
           ]'';
         focus-space = index: ''skhd -k "ctrl - ${index}"'';
@@ -77,6 +79,7 @@
      ########## Yabai bindings
      # open to apps
      cmd - t : open -n -a ~/Applications/Home\ Manager\ Apps/Alacritty.app
+     ctrl + cmd - t : open -n -a ~/Applications/Home\ Manager\ Apps/Wezterm.app
      cmd - i : open -a ~/Applications/Home\ Manager\ Apps/Alacritty.app
      cmd - b : open -a Firefox
      cmd - o : open -a "Microsoft Outlook"
@@ -86,6 +89,7 @@
      cmd - e : open -a ~/Applications/Home\ Manager\ Apps/Emacs.app
      cmd - r : ${passthru "cmd - space"}
      cmd - q : open -n -a Alacritty --args -e qalc
+     ctrl + cmd - q : open -n -a Alacritty --args -T floating-qalc -e qalc
      cmd - p : rofi-pass
 
      # focus window
@@ -134,6 +138,11 @@
      ctrl + cmd - s : yabai -m space --layout bsp
      ctrl + cmd - t : yabai -m space --layout float
 
+     # window resizing
+     cmd - left : yabai -m window --resize right:-20:0 2> /dev/null || yabai -m window --resize left:-20:0 2> /dev/null
+     # cmd - down : yabai -m window --resize bottom:0:20 2> /dev/null || yabai -m window --resize top:0:20 2> /dev/null
+     # cmd - up : yabai -m window --resize bottom:0:-20 2> /dev/null || yabai -m window --resize top:0:-20 2> /dev/null
+     cmd - right : yabai -m window --resize right:20:0 2> /dev/null || yabai -m window --resize left:20:0 2> /dev/null
 
 
      ########## PC-style bindings

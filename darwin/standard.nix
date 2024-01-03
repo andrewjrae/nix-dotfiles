@@ -33,6 +33,8 @@
       yabai
       skhd
       jq
+      pinentry
+      (python3.withPackages(ps: with ps; [ numpy matplotlib ]))
     ];
   };
   networking.hostName = "tricouni";
