@@ -141,9 +141,9 @@
         in inputs.home-manager.lib.homeManagerConfiguration rec {
           modules = [
             ./home/users/andrewr
-            ./modules/common.nix
-            ./modules/zsh.nix
-            ./modules/emacs.nix
+            ./home/common.nix
+            ./home/zsh.nix
+            ./home/emacs.nix
             ({config,...}: { isServer = true; })
           ];
           pkgs = import nixpkgs {
