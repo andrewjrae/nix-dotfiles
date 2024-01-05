@@ -48,6 +48,7 @@
             inputs.home-manager.darwinModule
             {
               home-manager = {
+                extraSpecialArgs = { inherit inputs; };
                 useGlobalPkgs = true;
                 useUserPackages = true;
                 users.ajrae = {
@@ -72,6 +73,7 @@
             inputs.home-manager.darwinModule
             {
               home-manager = {
+                extraSpecialArgs = { inherit inputs; };
                 useGlobalPkgs = true;
                 useUserPackages = true;
                 users.ajrae = {

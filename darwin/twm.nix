@@ -66,7 +66,7 @@
         ''[
              "Alacritty" ~
              "emacs" ~
-             "wezterm" ~
+             "WezTerm" ~
              * : ${passthru key}
           ]'';
         focus-space = index: ''skhd -k "ctrl - ${index}"'';
@@ -79,7 +79,7 @@
      ########## Yabai bindings
      # open to apps
      cmd - t : open -n -a ~/Applications/Home\ Manager\ Apps/Alacritty.app
-     ctrl + cmd - t : open -n -a ~/Applications/Home\ Manager\ Apps/Wezterm.app
+     ctrl + cmd - t : open -n -a wezterm
      cmd - i : open -a ~/Applications/Home\ Manager\ Apps/Alacritty.app
      cmd - b : open -a Firefox
      cmd - o : open -a "Microsoft Outlook"
