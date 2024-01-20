@@ -32,7 +32,7 @@ config.window_padding = {
   left = '7pt',
   right = '7pt',
   top = '7pt',
-  bottom = '7pt',
+  bottom = '0pt',
 }
 
 config.set_environment_variables = {
@@ -45,6 +45,55 @@ config.show_tabs_in_tab_bar = true
 config.show_new_tab_button_in_tab_bar = false
 config.tab_bar_at_bottom = true
 config.hide_tab_bar_if_only_one_tab = true
+
+function tab_title(tab_info)
+  local title = tab_info.tab_title
+  -- if the tab title is explicitly set, take that
+  if not title or #title <= 0 then
+    title = tab_info.active_pane.title
+  end
+  return string.format("%d: %s ", tab_info.tab_index, title)
+end
+
+local colors = wezterm.color.get_builtin_schemes()[config.color_scheme]
+local bg_alt = wezterm.color.parse(colors.background):darken(0.2)
+local fg_alt = wezterm.color.parse(colors.foreground):darken(0.2)
+local violet = wezterm.color.parse('#a9a1e1')
+config.colors = {
+  tab_bar = {
+    background = bg_alt
+  }
+}
+wezterm.on(
+  'format-tab-title',
+  function(tab, tabs, panes, config, hover, max_width)
+    local fg = fg_alt
+    if tab.is_active or hover then
+      fg = violet
+    end
+    local title = tab_title(tab)
+    return {
+      { Background = { Color = bg_alt } },
+      { Foreground = { Color = fg } },
+      { Text = ' ' },
+      { Background = { Color = bg_alt } },
+      { Foreground = { Color = fg } },
+      { Text = title },
+    }
+  end
+)
+
+wezterm.on('update-status', function(window, pane)
+             local workspace = string.format(" [%s]", wezterm.mux.get_active_workspace())
+  window:set_left_status(wezterm.format {
+      { Background = { Color = bg_alt } },
+      { Foreground = { Color = fg_alt } },
+      { Text = workspace },
+  })
+end
+)
+
+
 
 -- Disable stuff for TWMing
 config.adjust_window_size_when_changing_font_size = false
@@ -60,12 +109,14 @@ config.ssh_domains = {
   {
     name = 'dev',
     remote_address = 'dev',
-    remote_wezterm_path = "/home/ajrae/.nix-profile/bin/wezterm"
+    remote_wezterm_path = "/cb/home/andrewr/ws/bwrap-nix.sh wezterm",
   },
 }
 
 
 -- Key binds
+config.leader = { key = 'a', mods = 'CTRL', timeout_milliseconds = 1000 }
+
 local act = wezterm.action
 config.keys = {
   -- C-bspc -> C-w
@@ -76,19 +127,22 @@ config.keys = {
   -- For some reason on Mac this unicode is required
   { key = '\u{f746}', mods = 'CTRL', action = act.CopyTo 'Clipboard' },
   { key = '\u{f746}', mods = 'SHIFT', action = act.PasteFrom 'Clipboard' },
+  { key = 't', mods = 'LEADER', action = act.SpawnTab 'CurrentPaneDomain' },
+  { key = 'n', mods = 'LEADER', action = act.SpawnTab 'CurrentPaneDomain' },
+  { key = 'l', mods = 'LEADER', action = act.ActivateLastTab },
+  { key = 'w', mods = 'LEADER', action = act.ShowLauncherArgs { flags = 'FUZZY|WORKSPACES' } },
   -- Copy Mode
-  -- { key = 'Space', mods = 'CTRL | SHIFT', action = act.Multiple {act.ActivateCopyMode, {CopyMode = 'ClearPattern'}} },
-  {
-    key = 'Space',
-    mods = 'CTRL | SHIFT',
-    action = wezterm.action_callback(function (window, pane)
-        window:perform_action(act.ActivateCopyMode, pane)
-        window:perform_action(act.CopyMode 'ClearPattern', pane)
-        window:perform_action(act.CopyMode 'ClearSelectionMode', pane)
-        window:perform_action(act.CopyMode 'MoveToScrollbackBottom', pane)
-    end)
-  },
+  {key = 'Space', mods = 'CTRL | SHIFT', action = act.ActivateCopyMode},
 }
+for i = 0, 9 do
+  -- LEADER + number to activate that tab
+  table.insert(config.keys, {
+    key = tostring(i),
+    mods = 'LEADER',
+    action = act.ActivateTab(i),
+  })
+end
+
 
 local clear_and_close
 config.key_tables = {
@@ -96,7 +150,7 @@ config.key_tables = {
     { key = 'Tab', mods = 'NONE', action = act.CopyMode 'MoveForwardWord' },
     { key = 'Tab', mods = 'SHIFT', action = act.CopyMode 'MoveBackwardWord' },
     { key = 'Enter', mods = 'NONE', action = act.CopyMode 'MoveToStartOfNextLine' },
-    { key = 'Escape', mods = 'NONE', action = act.Multiple {act.ClearSelection, act.CopyMode 'Close' }},
+    { key = 'Escape', mods = 'NONE', action = act.Multiple {act.CopyMode 'ClearPattern', act.ClearSelection, act.CopyMode 'Close' }},
     { key = 'c', mods = 'CTRL', action = act.Multiple {act.ClearSelection, act.CopyMode 'Close' }},
     { key = 'Space', mods = 'NONE', action = act.CopyMode{ SetSelectionMode =  'Cell' } },
     { key = '$', mods = 'NONE', action = act.CopyMode 'MoveToEndOfLineContent' },
@@ -145,7 +199,7 @@ config.key_tables = {
     { key = 'DownArrow', mods = 'NONE', action = act.CopyMode 'MoveDown' },
   },
   search_mode = {
-    {key="Escape", mods="NONE", action=wezterm.action{CopyMode="Close"}},
+    {key="Escape", mods="NONE", action=wezterm.action{ CopyMode = "Close" }},
     -- Go back to copy mode when pressing enter, so that we can use unmodified keys like "n"
     -- to navigate search results without conflicting with typing into the search area.
     {key="Enter", mods="NONE", action="ActivateCopyMode"},

@@ -66,7 +66,8 @@
         ''[
              "Alacritty" ~
              "emacs" ~
-             "WezTerm" ~
+             "wezterm" ~
+             "wezterm-gui" ~
              * : ${passthru key}
           ]'';
         focus-space = index: ''skhd -k "ctrl - ${index}"'';
@@ -78,8 +79,9 @@
 
      ########## Yabai bindings
      # open to apps
-     cmd - t : open -n -a ~/Applications/Home\ Manager\ Apps/Alacritty.app
-     ctrl + cmd - t : open -n -a wezterm
+     # cmd - t : open -n -a ~/Applications/Home\ Manager\ Apps/Alacritty.app
+     cmd - t : open -n -a wezterm
+     ctrl + cmd - t : open -n -a wezterm --args connect dev
      cmd - i : open -a ~/Applications/Home\ Manager\ Apps/Alacritty.app
      cmd - b : open -a Firefox
      cmd - o : open -a "Microsoft Outlook"
@@ -88,7 +90,7 @@
      # cmd - e : emacsclient -c -a emacs
      cmd - e : open -a ~/Applications/Home\ Manager\ Apps/Emacs.app
      cmd - r : ${passthru "cmd - space"}
-     cmd - q : open -n -a Alacritty --args -e qalc
+     cmd - q : open -n -a wezterm --args start -- qalc
      ctrl + cmd - q : open -n -a Alacritty --args -T floating-qalc -e qalc
      cmd - p : rofi-pass
 
