@@ -5,9 +5,13 @@
     ./twm.nix
   ];
 
+  services.mako = {
+    enable = true;
+    defaultTimeout = 2500;
+  };
+
   home.packages = with pkgs; [
     swaybg
-    mako
     socat
     jaq
     grim
@@ -28,7 +32,6 @@
       exec-once = swaybg -i ~/.background-image -m fill
       exec-once = eww daemon
       exec-once = eww open bar
-      exec-once = moka
       # ----- variables -----
       general {
             layout = master
@@ -40,7 +43,7 @@
             resize_on_border = true
       }
       master {
-            new_is_master = true
+            new_is_master = false
             new_on_top = true
             orientation = center
       }
@@ -55,7 +58,9 @@
             inactive_opacity = 0.97
             fullscreen_opacity = 1.0
             # turn off for power saving
-            blur = false
+            blur {
+                  enabled = false
+            }
             drop_shadow = false
       }
       # touchpad settings
@@ -73,7 +78,7 @@
       misc {
             disable_hyprland_logo = true
             disable_splash_rendering = true
-            enable_swallow = true
+            enable_swallow = false
             swallow_regex = Alacritty
       }
       # animations:enabled = false
@@ -113,6 +118,9 @@
       binde = SUPER, RIGHT, resizeactive, 20 0
       binde = SUPER, UP, resizeactive, 0 -20
       binde = SUPER, DOWN, resizeactive, 0 20
+      # monitors
+      bind = CTRL SUPER, SPACE, focusmonitor, +1
+      bind = SHIFT CTRL SUPER, SPACE, movecurrentworkspacetomonitor, +1
       # workspace movement
       bind = SUPER, SPACE, workspace, previous
       bind = SUPER, 1, workspace, 1
@@ -140,8 +148,8 @@
       bind =, xf86audiomute, exec, amixer -q set Master toggle
       bind =, xf86audiolowervolume, exec, amixer -q set Master 5%-
       bind =, xf86audioraisevolume, exec, amixer -q set Master 5%+
-      bind =, xf86monbrightnessup,  exec, brightnessctl s +5%
-      bind =, xf86monbrightnessdown, exec, brightnessctl s 5%-
+      bind =, xf86monbrightnessup,  exec, brightnessctl s +2.5%
+      bind =, xf86monbrightnessdown, exec, brightnessctl s 2.5%-
       bind =, xf86audioplay, exec, playerctl play-pause
       bind =, xf86audionext, exec, playerctl next
       bind =, xf86audioprev, exec, playerctl previous
@@ -155,14 +163,14 @@
       animation = fade, 0, 8, default
       animation = border, 0, 8, default
       # ----- monitor configs -----
-      $laptopMonitor = eDP-1, preferred, 1920x0, 1
+      $laptopMonitor = eDP-1, preferred, 0, 1
       monitor = $laptopMonitor
-      monitor = desc:PXO Pixio PXC348C, 3440x1440@30, 0x0, 1
+      monitor = desc:PXO Pixio PXC348C, preferred, -3440x0, 1
       bindl =, switch:off:Lid Switch, exec, hyprctl keyword monitor "$laptopMonitor"
       bindl =, switch:on:Lid Switch, exec, ~/.config/hypr/lidswitch.sh
       # ----- window rules -----
       windowrule = float, blueberry
-    '';
+      '';
   };
   xdg.configFile."hypr/lidswitch.sh".source = ../configs/hypr/lidswitch.sh;
 }

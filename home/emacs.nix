@@ -67,6 +67,7 @@ in
          roboto
          latexmk;})
       graphviz
+      nodePackages.mermaid-cli
       pandoc]
   );
 
