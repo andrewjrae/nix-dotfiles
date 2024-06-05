@@ -21,8 +21,10 @@ let
 in
 {
   home.packages = with pkgs; [
-    wezterm-git
-    wezterm-git.terminfo
+    # wezterm-git
+    # wezterm-git.terminfo
+    wezterm
+    wezterm.terminfo
   ];
   xdg.configFile."wezterm/wezterm.lua".source = ../configs/wezterm/wezterm.lua;
 }

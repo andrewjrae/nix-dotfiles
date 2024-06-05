@@ -33,7 +33,7 @@
       yabai
       skhd
       jq
-      pinentry
+      pinentry_mac
       (python3.withPackages(ps: with ps; [ numpy matplotlib ]))
     ];
   };

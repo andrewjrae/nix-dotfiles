@@ -100,10 +100,6 @@ config.adjust_window_size_when_changing_font_size = false
 -- Get rid of top bar, but keep resizing
 config.window_decorations = 'RESIZE'
 
-config.dpi_by_screen = {
-  ['Pixio PXC348C'] = 72.667,
-}
-
 -- SSH Domains
 config.ssh_domains = {
   {
@@ -115,7 +111,7 @@ config.ssh_domains = {
 
 
 -- Key binds
-config.leader = { key = 'a', mods = 'CTRL', timeout_milliseconds = 1000 }
+config.leader = { key = 'a', mods = 'CTRL', timeout_milliseconds = 2000 }
 
 local act = wezterm.action
 config.keys = {
