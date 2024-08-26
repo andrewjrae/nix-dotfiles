@@ -39,7 +39,7 @@
   };
 
   outputs = { self, nixpkgs, darwin, home-manager, ... }@inputs:
-     {
+     rec {
       darwinConfigurations = {
         "ajrae-mac" = darwin.lib.darwinSystem {
           system = "aarch64-darwin";
@@ -133,6 +133,33 @@
           ];
           specialArgs = { inherit inputs; };
         };
+
+        "jukebox" = nixpkgs.lib.nixosSystem {
+          system = "aarch64-linux";
+          modules = [
+            "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
+            ./hosts/jukebox
+            inputs.home-manager.nixosModule
+            {
+              home-manager = {
+                extraSpecialArgs = { inherit inputs; };
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                users.ajrae = {
+                  imports = [
+                    ./home/users/ajrae
+                    ./home/common.nix
+                    ./home/zsh.nix
+                  ];
+                };
+              };
+              nixpkgs = {
+                config.allowUnfree = true;
+              };
+            }
+          ];
+          specialArgs = { inherit inputs; };
+        };
       };
 
       homeConfigurations = {
@@ -152,5 +179,6 @@
           };
         };
       };
+      images.jukebox = nixosConfigurations.jukebox.config.system.build.sdImage;
     };
 }
