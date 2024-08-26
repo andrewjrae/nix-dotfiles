@@ -2,39 +2,39 @@
   description = "Andrew's Nix Environment";
 
   inputs = {
-    unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     # Nix-Darwin
     darwin = {
       url = "github:LnL7/nix-darwin";
-      inputs.nixpkgs.follows = "unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     # HM-manager for dotfile/user management
     home-manager = {
       url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     # Bar (macos)
     spacebar = {
       url = "github:shaunsingh/spacebar";
-      inputs.nixpkgs.follows = "unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     # Emacs overlay
     emacs-overlay = {
       url = "github:nix-community/emacs-overlay";
-      inputs.nixpkgs.follows = "unstable";
+      # inputs.nixpkgs.follows = "nixpkgs";
     };
     # hyprland!
     hyprland.url = "github:hyprwm/Hyprland";
     eww = {
       url = "github:elkowar/eww";
-      inputs.nixpkgs.follows = "unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
       inputs.rust-overlay.follows = "rust-overlay";
     };
     rust-overlay = {
       url = "github:oxalica/rust-overlay";
-      inputs.nixpkgs.follows = "unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -96,7 +96,7 @@
       };
 
       nixosConfigurations = {
-        "garibaldi" = nixpkgs.lib.nixosSystem {
+        "garibaldi" = nixpkgs.lib.nixosSystem rec {
           system = "x86_64-linux";
           modules = [
             ./hosts/garibaldi
@@ -107,7 +107,7 @@
             inputs.home-manager.nixosModule
             {
               home-manager = {
-                extraSpecialArgs = { inherit inputs; };
+                extraSpecialArgs = { inherit inputs; emacs-overlay-packages = inputs.emacs-overlay.packages."${system}"; };
                 useGlobalPkgs = true;
                 useUserPackages = true;
                 users.ajrae = {

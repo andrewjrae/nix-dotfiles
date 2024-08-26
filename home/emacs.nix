@@ -1,12 +1,13 @@
-{ config, lib, pkgs, home-manager, inputs,... }:
+{ config, lib, pkgs, home-manager, emacs-overlay-packages,... }:
 
 let
   #emacs-gui = with pkgs; ((emacsPackagesFor emacsPgtkNativeComp).emacsWithPackages (epkgs: [
-  emacs-gui = with pkgs; ((emacsPackagesFor emacsPgtk).emacsWithPackages (epkgs: [
-    epkgs.vterm
-    epkgs.pdf-tools
-    epkgs.org-pdftools
-  ]));
+  # emacs-gui = with pkgs; ((emacsPackagesFor emacs-unstable-pgtk).emacsWithPackages (epkgs: [
+  #   epkgs.vterm
+  #   epkgs.pdf-tools
+  #   epkgs.org-pdftools
+  # ]));
+  emacs-gui = pkgs.emacs-unstable-pgtk;
   emacs-tui = with pkgs; ((emacsPackagesFor emacsNativeComp).emacsWithPackages (epkgs: [
     epkgs.vterm
   ]));

@@ -84,13 +84,14 @@
       # animations:enabled = false
       # ----- keybinds -----
       $browser = firefox
-      $terminal = alacritty
+      $terminal = wezterm
+      $terminal-run = wezterm start --
       # the essentials
       bind = SUPER, b, exec, $browser
       bind = SUPER, e, exec, emacsclient -c -a emacs
       bind = SUPER, t, exec, $terminal
-      bind = SUPER, h, exec, $terminal -e htop
-      bind = SUPER, q, exec, $terminal -e qalc
+      bind = SUPER, h, exec, $terminal-run htop
+      bind = SUPER, q, exec, $terminal-run qalc
       # rofi (and other launchers)
       bind = SUPER, r, exec, rofi -show run
       bind = SUPER, s, exec, rofi -show ssh

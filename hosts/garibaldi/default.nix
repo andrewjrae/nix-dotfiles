@@ -41,7 +41,7 @@ in
     };
     nixPath = [ "nixpkgs=/etc/${channelsPath}" ];
   };
-  environment.etc."${channelsPath}".source = inputs.unstable.outPath;
+  environment.etc."${channelsPath}".source = inputs.nixpkgs.outPath;
 
   networking.hostName = "garibaldi";
 
