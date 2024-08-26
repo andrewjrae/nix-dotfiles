@@ -15,8 +15,7 @@
     };
   };
   fonts = {
-    fontDir.enable = true;
-    fonts = with pkgs; [
+    packages = with pkgs; [
       fira
       fira-code
       font-awesome_5
@@ -31,9 +30,11 @@
     home = "/Users/ajrae";
     packages = with pkgs; [
       yabai
+      jankyborders
       skhd
       jq
       pinentry_mac
+      xquartz
       (python3.withPackages(ps: with ps; [ numpy matplotlib ]))
     ];
   };

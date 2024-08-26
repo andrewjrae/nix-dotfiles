@@ -4,7 +4,7 @@
 
  services.yabai = {
    enable = true;
-   enableScriptingAddition = true;
+   enableScriptingAddition = false;
    package = pkgs.yabai;
    config = {
      # layout
@@ -14,17 +14,12 @@
      window_placement = "second_child";
      # Gaps
      external_bar = "all:32:0";
-     window_gap = 5;
-     top_padding = 5;
-     bottom_padding = 5;
-     left_padding = 5;
-     right_padding = 5;
+     window_gap = 12;
+     top_padding = 9;
+     bottom_padding = 9;
+     left_padding = 9;
+     right_padding = 9;
      # shadows and borders
-     window_shadow = "on";
-     window_border = "off";
-     window_border_width = 3;
-     normal_window_border_color = "0x4c566a";
-     active_window_border_color = "0xc678dd";
      window_opacity = "on";
      window_opacity_duration = "0.1";
      active_window_opacity = "1.0";
@@ -41,6 +36,7 @@
      # rules
      yabai -m rule --add app=emacsclient manage=on
      yabai -m rule --add app=emacs manage=on
+     yabai -m rule --add app='emacs-29.3' manage=on
      yabai -m rule --add app=Emacs manage=on
      yabai -m rule --add app=WezTerm manage=on
      yabai -m rule --add app='Firefox' manage=on
@@ -56,6 +52,13 @@
    '';
  };
 
+ services.jankyborders = {
+      enable = true;
+      package = pkgs.jankyborders;
+      width = 6.0;
+      active_color = "0xffc678dd";
+      inactive_color = "0xff4c566a";
+ };
 
  services.skhd = {
    enable = true;
