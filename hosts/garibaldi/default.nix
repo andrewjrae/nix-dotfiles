@@ -4,9 +4,6 @@
 
 { config, pkgs, inputs,... }:
 
-let
-  channelsPath = "channels/nixpkgs";
-in
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -18,6 +15,9 @@ in
   boot.kernelModules = [ "acpi_call" "i2c-dev" "ddcci_backlight" ];
   boot.extraModulePackages = with config.boot.kernelPackages; [ acpi_call ddcci-driver ];
 
+  boot.binfmt.emulatedSystems = ["aarch64-linux"];
+  nix.settings.extra-platforms = ["aarch64-linux"];
+
   # Bootloader.
   boot.loader.systemd-boot = {
     enable = true;
@@ -25,23 +25,6 @@ in
   };
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
-
-  nix = {
-    settings = {
-      # Enable flakes and new 'nix' command
-      experimental-features = "nix-command flakes";
-      # Deduplicate and optimize nix store
-      auto-optimise-store = true;
-    };
-    # automatic garbage collection
-    gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 20d";
-    };
-    nixPath = [ "nixpkgs=/etc/${channelsPath}" ];
-  };
-  environment.etc."${channelsPath}".source = inputs.nixpkgs.outPath;
 
   networking.hostName = "garibaldi";
 

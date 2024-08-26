@@ -32,12 +32,12 @@
   services.devmon.enable = true;
   services.gvfs.enable = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.ajrae = {
+    password = "ajrae"; # dummy password
     isNormalUser = true;
     extraGroups = [ "networkmanager" "wheel"];
     openssh.authorizedKeys.keys = [
-      # TODO: migrate keys to here
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM+7lhJEotTme2xeF6mrjjNO+QorIkPxYz4lOB648fDy ajrae@garibaldi"
     ];
     shell = pkgs.zsh;
   };

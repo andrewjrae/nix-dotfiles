@@ -139,6 +139,7 @@
           modules = [
             "${nixpkgs}/nixos/modules/installer/sd-card/sd-image-aarch64.nix"
             ./hosts/jukebox
+            inputs.nixos-hardware.nixosModules.raspberry-pi-4
             inputs.home-manager.nixosModule
             {
               home-manager = {
@@ -155,6 +156,14 @@
               };
               nixpkgs = {
                 config.allowUnfree = true;
+                # Overlay to workaround kernel build issue:
+                # https://github.com/NixOS/nixpkgs/issues/126755#issuecomment-869149243
+                overlays = [
+                  (final: super: {
+                    makeModulesClosure = x:
+                      super.makeModulesClosure (x // { allowMissing = true; });
+                  })
+                ];
               };
             }
           ];
