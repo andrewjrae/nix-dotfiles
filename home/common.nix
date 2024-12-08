@@ -16,6 +16,7 @@
     home.packages = with pkgs; [
       (ripgrep.override {withPCRE2 = true;})
       fd
+      tmux
       htop
       libqalculate
       wget

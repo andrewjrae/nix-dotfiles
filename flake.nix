@@ -151,6 +151,7 @@
                     ./home/users/ajrae
                     ./home/common.nix
                     ./home/zsh.nix
+                    ./home/spotifyd.nix
                   ];
                 };
               };

@@ -22,12 +22,6 @@
   # Select internationalisation properties.
   i18n.defaultLocale = "en_CA.UTF-8";
 
-  # hardware.bluetooth = {
-  #   enable = true;
-  #   # battery info support
-  #   package = pkgs.bluez5-experimental;
-  # };
-
   # Auto mount usb devices
   services.devmon.enable = true;
   services.gvfs.enable = true;
@@ -35,7 +29,7 @@
   users.users.ajrae = {
     password = "ajrae"; # dummy password
     isNormalUser = true;
-    extraGroups = [ "networkmanager" "wheel"];
+    extraGroups = [ "networkmanager" "wheel" "audio"];
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM+7lhJEotTme2xeF6mrjjNO+QorIkPxYz4lOB648fDy ajrae@garibaldi"
     ];
@@ -70,17 +64,20 @@
   };
 
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 22 ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
+  networking.firewall.allowedTCPPorts = [ 22 4444 ];
+  networking.firewall.allowedUDPPorts = [ 5353 ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
   environment.enableAllTerminfo = true;
   environment.systemPackages = with pkgs; [
     killall
+    alsa-utils
   ];
 
   # Enable sound.
+  sound.enable = true;
+  hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -88,6 +85,22 @@
     alsa.support32Bit = true;
     pulse.enable = true;
   };
+
+  # # spotifyd to act as speaker
+  # services.spotifyd = {
+  #     enable = true;
+  #     settings = {
+  #         global = {
+  #             zeroconf_port = 4444;
+  #             autoplay = false;
+  #             bitrate = 320;
+  #             device_name = "Living Room";
+  #             device_type = "speaker";
+  #             device = "sysdefault:CARD=D10s";
+  #             backend = "alsa";
+  #         };
+  #     };
+  # };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
