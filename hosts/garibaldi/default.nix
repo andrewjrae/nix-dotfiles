@@ -87,6 +87,7 @@
   # (otherwise can't ssh to hostname with my current router)
   services.avahi = {
     enable = true;
+    nssmdns4 = true;
     publish = {
       enable = true;
       addresses = true;
