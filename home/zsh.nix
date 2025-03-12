@@ -5,13 +5,12 @@
   programs.zsh = {
     enable = true;
     autocd = true;
-    autosuggestion.enable = true;
+    autosuggestion.enable = false;
     enableCompletion = true;
     oh-my-zsh = {
       enable = true;
       theme = "ajrae";
       custom = "$HOME/.config/oh-my-zsh";
-      plugins = [ "git" "sudo"];
     };
     shellAliases = {
       psrg = "ps -aux | rg -i";
@@ -20,10 +19,12 @@
       xclp = "xclip -sel clip";
     };
     initExtra = ''
+
         # Change to Zsh's default readkey engine
         # ZVM_CURSOR_STYLE_ENABLED=false
         ZVM_VI_HIGHLIGHT_FOREGROUND=#bbc2cf
         ZVM_VI_HIGHLIGHT_BACKGROUND=#3e4451
+        # ZVM_INIT_MODE=sourcing
         source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
         zvm_after_init_commands+=('source ${pkgs.fzf}/share/fzf/key-bindings.zsh')
       '';
