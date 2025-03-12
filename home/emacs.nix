@@ -11,7 +11,7 @@ let
   emacs-tui = with pkgs; ((emacsPackagesFor emacsNativeComp).emacsWithPackages (epkgs: [
     epkgs.vterm
   ]));
-  emacs-mac = with pkgs; ((emacsPackagesFor emacs28).emacsWithPackages (epkgs: [
+  emacs-mac = with pkgs; ((emacsPackagesFor emacs30).emacsWithPackages (epkgs: [
     epkgs.vterm
     epkgs.pdf-tools
     epkgs.org-pdftools
@@ -69,6 +69,7 @@ in
          latexmk;})
       graphviz
       nodePackages.mermaid-cli
+      pdf2svg
       pandoc]
   );
 

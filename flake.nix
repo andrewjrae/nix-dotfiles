@@ -45,7 +45,7 @@
           system = "aarch64-darwin";
           modules = [
             ./darwin/standard.nix
-            inputs.home-manager.darwinModule
+            inputs.home-manager.darwinModules.home-manager
             {
               home-manager = {
                 extraSpecialArgs = { inherit inputs; };
@@ -70,7 +70,7 @@
           modules = [
             ./darwin/standard.nix
             ./darwin/twm.nix
-            inputs.home-manager.darwinModule
+            inputs.home-manager.darwinModules.home-manager
             {
               home-manager = {
                 extraSpecialArgs = { inherit inputs; };
@@ -92,6 +92,7 @@
               };
             }
           ];
+          specialArgs = { inherit inputs; };
         };
       };
 

@@ -1,6 +1,10 @@
-{ config, pkgs, lib, ... }: {
+{ config, pkgs, lib, inputs,... }:
+let
+  channelsPath = "channels/nixpkgs";
+in {
 
   nix = {
+    enable = true;
     package = pkgs.nix;
     extraOptions = ''
       system = aarch64-darwin # M1 gang
@@ -21,8 +25,8 @@
       font-awesome_5
     ];
   };
+  environment.etc."${channelsPath}".source = inputs.nixpkgs.outPath;
 
-  services.nix-daemon.enable = true;
   programs.zsh.enable = true;
   programs.gnupg.agent.enable = true;
 
@@ -34,17 +38,17 @@
       skhd
       jq
       pinentry_mac
-      xquartz
-      (python3.withPackages(ps: with ps; [ numpy matplotlib ]))
+      monitorcontrol
+      (python3.withPackages(ps: with ps; [ numpy matplotlib tabulate ]))
     ];
   };
   networking.hostName = "tricouni";
   system.stateVersion = 4;
 
-#  system.keyboard = {
-#    enableKeyMapping = true;
-#    remapCapsLockToEscape = true;
-#  };
+  #  system.keyboard = {
+  #    enableKeyMapping = true;
+  #    remapCapsLockToEscape = true;
+  #  };
   system.defaults = {
     screencapture = { location = "/tmp"; };
     dock = {
@@ -57,15 +61,15 @@
       QuitMenuItem = true;
       FXEnableExtensionChangeWarning = true;
     };
-#    NSGlobalDomain = {
-#      AppleKeyboardUIMode = 3;
-#      ApplePressAndHoldEnabled = false;
-#      AppleFontSmoothing = 1;
-#      _HIHideMenuBar = true;
-#      InitialKeyRepeat = 10;
-#      KeyRepeat = 1;
-#      "com.apple.mouse.tapBehavior" = 1;
-#      "com.apple.swipescrolldirection" = true;
-#    };
+    #    NSGlobalDomain = {
+    #      AppleKeyboardUIMode = 3;
+    #      ApplePressAndHoldEnabled = false;
+    #      AppleFontSmoothing = 1;
+    #      _HIHideMenuBar = true;
+    #      InitialKeyRepeat = 10;
+    #      KeyRepeat = 1;
+    #      "com.apple.mouse.tapBehavior" = 1;
+    #      "com.apple.swipescrolldirection" = true;
+    #    };
   };
 }
