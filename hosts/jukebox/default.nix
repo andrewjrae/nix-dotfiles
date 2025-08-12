@@ -69,14 +69,19 @@
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
+  networking.hosts = {
+    "0.0.0.0" = ["apresolve.spotify.com"];
+  };
+
   environment.enableAllTerminfo = true;
   environment.systemPackages = with pkgs; [
     killall
+    librespot
     alsa-utils
   ];
 
   # Enable sound.
-  sound.enable = true;
+  # sound.enable = true;
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -86,21 +91,23 @@
     pulse.enable = true;
   };
 
-  # # spotifyd to act as speaker
-  # services.spotifyd = {
-  #     enable = true;
-  #     settings = {
-  #         global = {
-  #             zeroconf_port = 4444;
-  #             autoplay = false;
-  #             bitrate = 320;
-  #             device_name = "Living Room";
-  #             device_type = "speaker";
-  #             device = "sysdefault:CARD=D10s";
-  #             backend = "alsa";
-  #         };
-  #     };
-  # };
+
+  # service to setup spotify connect device via librespot
+  systemd.services.librespot-connect = {
+    enable = true;
+    description = "Spotify Connect Receiver Using librespot";
+    unitConfig = {
+      Requires = [ "network-online.target" "sound.target" ];
+      After = [ "network-online.target" "sound.target" ];
+    };
+    serviceConfig = {
+      Restart="always";
+      ExecStart = ''
+        ${pkgs.librespot}/bin/librespot -n "Boppity Beans" -z 4444 -B alsa -d "sysdefault:CARD=D10s" -b 320 -f S24
+      '';
+    };
+    wantedBy = [ "multi-user.target" ];
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
