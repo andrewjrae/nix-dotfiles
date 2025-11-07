@@ -8,7 +8,7 @@ let
   #   epkgs.org-pdftools
   # ]));
   emacs-gui = pkgs.emacs-unstable-pgtk;
-  emacs-tui = with pkgs; ((emacsPackagesFor emacsNativeComp).emacsWithPackages (epkgs: [
+  emacs-tui = with pkgs; ((emacsPackagesFor emacs30-nox).emacsWithPackages (epkgs: [
     epkgs.vterm
   ]));
   emacs-mac = with pkgs; ((emacsPackagesFor emacs30).emacsWithPackages (epkgs: [
