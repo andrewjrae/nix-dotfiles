@@ -30,16 +30,21 @@ in {
   programs.zsh.enable = true;
   programs.gnupg.agent.enable = true;
 
+  system.primaryUser = "ajrae";
   users.users.ajrae = {
     home = "/Users/ajrae";
     packages = with pkgs; [
-      yabai
+      # yabai
+      # skhd
       jankyborders
-      skhd
       jq
       pinentry_mac
-      monitorcontrol
-      (python3.withPackages(ps: with ps; [ numpy matplotlib tabulate ]))
+      (python3.withPackages(ps: with ps; [
+        numpy
+        matplotlib
+        tabulate
+        scipy
+      ]))
     ];
   };
   networking.hostName = "tricouni";

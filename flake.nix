@@ -41,10 +41,11 @@
   outputs = { self, nixpkgs, darwin, home-manager, ... }@inputs:
      rec {
       darwinConfigurations = {
-        "ajrae-mac" = darwin.lib.darwinSystem {
+        "ajrae-mac-aero" = darwin.lib.darwinSystem {
           system = "aarch64-darwin";
           modules = [
             ./darwin/standard.nix
+            ./darwin/twm-aero.nix
             inputs.home-manager.darwinModules.home-manager
             {
               home-manager = {
@@ -55,15 +56,20 @@
                   imports = [
                     ./home/users/ajrae
                     ./home/standard.nix
+                    ./home/darwin.nix
                   ];
                 };
               };
               nixpkgs = {
                 config.allowUnfree = true;
-                overlays = [ inputs.emacs-overlay.overlay ];
+                overlays = [
+                  inputs.emacs-overlay.overlay
+                  inputs.spacebar.overlay
+                ];
               };
             }
           ];
+          specialArgs = { inherit inputs; };
         };
         "ajrae-mac-twm" = darwin.lib.darwinSystem {
           system = "aarch64-darwin";
@@ -80,6 +86,7 @@
                   imports = [
                     ./home/users/ajrae
                     ./home/standard.nix
+                    ./home/darwin.nix
                   ];
                 };
               };

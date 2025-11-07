@@ -6,8 +6,28 @@ if wezterm.config_builder then
   config = wezterm.config_builder()
 end
 
+
 -- Styling
-config.color_scheme = 'OneHalfDark'
+local light_scheme = "OneHalfLight"
+local dark_scheme = "OneHalfDark"
+
+function get_appearance()
+  if wezterm.gui then
+    return wezterm.gui.get_appearance()
+  end
+  return 'Dark'
+end
+
+function scheme_for_appearance(appearance)
+  if appearance:find 'Dark' then
+    return dark_scheme
+  else
+    return light_scheme
+  end
+end
+
+local system_scheme = scheme_for_appearance(get_appearance())
+config.color_scheme = system_scheme
 
 local default_font = 'Fira Code'
 config.font = wezterm.font(default_font)
@@ -38,6 +58,8 @@ config.window_padding = {
 config.set_environment_variables = {
   TERMINFO_DIRS = '/etc/profiles/per-user/ajrae/share/terminfo'
 }
+
+config.front_end = "WebGpu"
 
 -- Tmux like tab bar
 config.use_fancy_tab_bar = false
@@ -110,8 +132,10 @@ config.ssh_domains = {
 }
 
 
+config.enable_kitty_keyboard = false
+
 -- Key binds
-config.leader = { key = 'a', mods = 'CTRL', timeout_milliseconds = 2000 }
+config.leader = { key = 'e', mods = 'CTRL', timeout_milliseconds = 2000 }
 
 local act = wezterm.action
 config.keys = {
@@ -138,7 +162,6 @@ for i = 0, 9 do
     action = act.ActivateTab(i),
   })
 end
-
 
 local clear_and_close
 config.key_tables = {

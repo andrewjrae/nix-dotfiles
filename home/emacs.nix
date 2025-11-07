@@ -50,6 +50,10 @@ in
     rust-analyzer
     clippy
 
+    tree-sitter-grammars.tree-sitter-cpp
+
+    aider-chat
+
     # :checkers spell
     (aspellWithDicts (ds: with ds; [
       en en-computers en-science
