@@ -10,11 +10,13 @@ let
   emacs-gui = pkgs.emacs-unstable-pgtk;
   emacs-tui = with pkgs; ((emacsPackagesFor emacs30-nox).emacsWithPackages (epkgs: [
     epkgs.vterm
+    epkgs.treesit-grammars.with-all-grammars
   ]));
   emacs-mac = with pkgs; ((emacsPackagesFor emacs30).emacsWithPackages (epkgs: [
     epkgs.vterm
     epkgs.pdf-tools
     epkgs.org-pdftools
+    epkgs.treesit-grammars.with-all-grammars
   ]));
   emacs-in-use = (if config.isServer
                   then emacs-tui
@@ -49,8 +51,6 @@ in
     rustfmt
     rust-analyzer
     clippy
-
-    tree-sitter-grammars.tree-sitter-cpp
 
     aider-chat
 

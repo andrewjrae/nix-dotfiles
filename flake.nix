@@ -26,7 +26,7 @@
       # inputs.nixpkgs.follows = "nixpkgs";
     };
     # hyprland!
-    hyprland.url = "github:hyprwm/Hyprland";
+    hyprland.url = "github:hyprwm/Hyprland/v0.47.2";
     eww = {
       url = "github:elkowar/eww";
       inputs.nixpkgs.follows = "nixpkgs";
