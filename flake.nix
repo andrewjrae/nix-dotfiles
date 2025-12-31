@@ -23,17 +23,12 @@
     # Emacs overlay
     emacs-overlay = {
       url = "github:nix-community/emacs-overlay";
-      # inputs.nixpkgs.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     # hyprland!
-    hyprland.url = "github:hyprwm/Hyprland/v0.47.2";
-    eww = {
-      url = "github:elkowar/eww";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.rust-overlay.follows = "rust-overlay";
-    };
-    rust-overlay = {
-      url = "github:oxalica/rust-overlay";
+    hyprland = {
+      url = "github:hyprwm/Hyprland/v0.52.2";
+      #submodules = true;
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -112,7 +107,7 @@
             ./nixos/hyprland.nix
             inputs.hyprland.nixosModules.default
             inputs.nixos-hardware.nixosModules.dell-xps-15-9560-nvidia
-            inputs.home-manager.nixosModule
+            inputs.home-manager.nixosModules.home-manager
             {
               home-manager = {
                 extraSpecialArgs = { inherit inputs; emacs-overlay-packages = inputs.emacs-overlay.packages."${system}"; };
@@ -133,8 +128,6 @@
                 config.allowUnfree = true;
                 overlays = [
                   inputs.emacs-overlay.overlay
-                  inputs.eww.overlays.default
-                  inputs.rust-overlay.overlays.default
                 ];
               };
             }

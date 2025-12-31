@@ -6,13 +6,20 @@ if wezterm.config_builder then
   config = wezterm.config_builder()
 end
 
+local is_linux = function()
+	return wezterm.target_triple:find("linux") ~= nil
+end
+local is_darwin = function()
+	return wezterm.target_triple:find("darwin") ~= nil
+end
+
 
 -- Styling
 local light_scheme = "OneHalfLight"
 local dark_scheme = "OneHalfDark"
 
 function get_appearance()
-  if wezterm.gui then
+  if wezterm.gui and is_darwin() then
     return wezterm.gui.get_appearance()
   end
   return 'Dark'
@@ -43,7 +50,7 @@ config.font_rules = {
     font = wezterm.font(default_font, { weight = 'Bold', italic = true })
   },
 }
-config.font_size = 14.0
+config.font_size = is_darwin() and 14.0 or 12.0
 
 -- Disable ligatures
 config.harfbuzz_features = { 'calt=0', 'clig=0', 'liga=0' }
@@ -115,12 +122,10 @@ wezterm.on('update-status', function(window, pane)
 end
 )
 
-
-
 -- Disable stuff for TWMing
 config.adjust_window_size_when_changing_font_size = false
--- Get rid of top bar, but keep resizing
-config.window_decorations = 'RESIZE'
+-- Get rid of top bar, but keep resizing (darwin only)
+config.window_decorations = is_darwin() and 'RESIZE' or 'NONE'
 
 -- SSH Domains
 config.ssh_domains = {

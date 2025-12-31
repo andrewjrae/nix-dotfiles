@@ -6,12 +6,18 @@
   home.stateVersion = "22.05";
 
   programs.git = {
-      enable = true;
-      userEmail = "ajrae.nv@gmail.com";
-      userName = "Andrew Rae";
-      extraConfig.pull.rebase = true;
-      extraConfig.init.defaultBranch = "development";
+    enable = true;
+    settings = {
+      user.email = "ajrae.nv@gmail.com";
+      user.name = "Andrew Rae";
+      pull.rebase = true;
+      init.defaultBranch = "development";
     };
+  };
+
+  home.sessionVariables = {
+    TERMINAL = "wezterm";
+  };
 
   programs.zsh.shellAliases = { ecli = "TERM=alacritty-direct emacsclient -t"; };
 }

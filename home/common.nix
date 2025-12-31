@@ -1,9 +1,6 @@
 { config, pkgs, lib, home-manager, inputs,... }:
 
 {
-  imports = [
-      ./wezterm.nix
-  ];
   # add any global options we want here
   options = with lib; with types; {
     isServer = mkOption {

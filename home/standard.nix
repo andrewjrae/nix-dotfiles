@@ -7,6 +7,7 @@
       ./zsh.nix
       ./fonts.nix
       ./emacs.nix
-      ./alacritty.nix
+      ./wezterm.nix
+      # ./alacritty.nix
   ];
 }

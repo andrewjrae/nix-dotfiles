@@ -15,7 +15,6 @@ in {
   programs.gpg.enable = true;
   services.gpg-agent = {
     enable = true;
-    pinentryFlavor = null;
     extraConfig = ''
       pinentry-program ${pinentryRofi}/bin/pinentry-rofi-with-env
     '';
@@ -23,7 +22,7 @@ in {
 
   programs.rofi = {
     enable = true;
-    package = pkgs.rofi-wayland;
+    package = pkgs.rofi;
     pass = {
       enable = true;
       stores = [ "$HOME/.password-store" ];

@@ -18,7 +18,7 @@
       latr = "ls -lahtr";
       xclp = "xclip -sel clip";
     };
-    initExtra = ''
+    initContent = ''
 
         # Change to Zsh's default readkey engine
         # ZVM_CURSOR_STYLE_ENABLED=false

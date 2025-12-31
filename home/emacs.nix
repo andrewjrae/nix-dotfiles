@@ -33,6 +33,7 @@ in
     fd
     gnused
     emacs-all-the-icons-fonts
+    nerd-fonts.symbols-only
 
     # Install doom emacs externally so we can manage the dotfiles manually
     # (this makes tinkering and installing doom much easier)

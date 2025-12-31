@@ -7,7 +7,7 @@
 
   services.mako = {
     enable = true;
-    defaultTimeout = 2500;
+    settings.default-timeout = 2500;
   };
 
   home.packages = with pkgs; [
@@ -22,7 +22,7 @@
 
   wayland.windowManager.hyprland = {
     enable = true;
-    package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+    package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
     extraConfig = ''
       # ----- setup -----
       env = XDG_CURRENT_DESKTOP, Hyprland
@@ -43,8 +43,8 @@
             resize_on_border = true
       }
       master {
-            new_is_master = false
-            new_on_top = true
+            mfact = 0.45
+            new_on_active = before
             orientation = center
       }
       binds {
@@ -58,10 +58,8 @@
             inactive_opacity = 0.97
             fullscreen_opacity = 1.0
             # turn off for power saving
-            blur {
-                  enabled = false
-            }
-            drop_shadow = false
+            blur:enabled = false
+            shadow:enabled = false
       }
       # touchpad settings
       input {
@@ -71,7 +69,7 @@
             }
       }
       gestures {
-            workspace_swipe = true
+            workspace_swipe_touch = true
             workspace_swipe_distance = 150
       }
       # misc
@@ -81,7 +79,12 @@
             enable_swallow = false
             swallow_regex = Alacritty
       }
-      # animations:enabled = false
+      cursor {
+        hide_on_key_press = true
+        inactive_timeout = 5
+        # persistent_warps = true
+      }
+      animations:enabled = false
       # ----- keybinds -----
       $browser = firefox
       $terminal = wezterm
@@ -164,13 +167,13 @@
       animation = fade, 0, 8, default
       animation = border, 0, 8, default
       # ----- monitor configs -----
-      $laptopMonitor = eDP-1, preferred, 0, 1
+      $laptopMonitor = eDP-1, preferred, 0x0, 1
       monitor = $laptopMonitor
       monitor = desc:PXO Pixio PXC348C, preferred, 0x-1440, 1
       bindl =, switch:off:Lid Switch, exec, hyprctl keyword monitor "$laptopMonitor"
       bindl =, switch:on:Lid Switch, exec, ~/.config/hypr/lidswitch.sh
       # ----- window rules -----
-      windowrule = float, blueberry
+      #windowrule = float, blueberry
       '';
   };
   xdg.configFile."hypr/lidswitch.sh".source = ../configs/hypr/lidswitch.sh;

@@ -43,13 +43,13 @@
   # Select internationalisation properties.
   i18n.defaultLocale = "en_CA.UTF-8";
 
-  hardware.opengl.enable = true; # the rest of opengl config comes from nixos-hardware
+  hardware.graphics.enable = true;
 
   hardware.i2c.enable = true;
   hardware.bluetooth = {
     enable = true;
     # battery info support
-    package = pkgs.bluez5-experimental;
+    package = pkgs.bluez;
   };
 
   # Auto mount usb devices
@@ -112,6 +112,8 @@
     ddcutil
   ];
 
+  environment.pathsToLink = [ "/share/applications" "/share/xdg-desktop-portal" ];
+
   # Enable sound.
   security.rtkit.enable = true;
   services.pipewire = {
@@ -132,7 +134,7 @@
     enable = true;
     settings = {
       default_session = {
-        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --remember --remember-session --cmd ${config.wmCmd}";
+        command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-session --cmd ${config.wmCmd}";
         user = "greeter";
       };
     };
