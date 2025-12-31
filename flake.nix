@@ -111,7 +111,7 @@
             # ./nixos/xmonad.nix
             ./nixos/hyprland.nix
             inputs.hyprland.nixosModules.default
-            inputs.nixos-hardware.nixosModules.dell-xps-15-9560-intel
+            inputs.nixos-hardware.nixosModules.dell-xps-15-9560-nvidia
             inputs.home-manager.nixosModule
             {
               home-manager = {
@@ -140,6 +140,14 @@
             }
           ];
           specialArgs = { inherit inputs; };
+        };
+
+        "live" = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ./hosts/live
+            "${inputs.nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
+          ];
         };
 
         "jukebox" = nixpkgs.lib.nixosSystem {
@@ -197,6 +205,8 @@
           };
         };
       };
+
       images.jukebox = nixosConfigurations.jukebox.config.system.build.sdImage;
+      images.live = nixosConfigurations.live.config.system.build.isoImage;
     };
 }

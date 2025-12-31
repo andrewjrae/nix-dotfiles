@@ -15,6 +15,7 @@
   boot.kernelModules = [ "acpi_call" "i2c-dev" "ddcci_backlight" ];
   boot.extraModulePackages = with config.boot.kernelPackages; [ acpi_call ddcci-driver ];
 
+  boot.supportedFilesystems = ["ntfs"];
   boot.binfmt.emulatedSystems = ["aarch64-linux"];
   nix.settings.extra-platforms = ["aarch64-linux"];
 
@@ -44,6 +45,7 @@
 
   hardware.opengl.enable = true; # the rest of opengl config comes from nixos-hardware
 
+  hardware.i2c.enable = true;
   hardware.bluetooth = {
     enable = true;
     # battery info support
@@ -57,7 +59,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.ajrae = {
     isNormalUser = true;
-    extraGroups = [ "networkmanager" "wheel" "docker"];
+    extraGroups = [ "networkmanager" "wheel" "docker" "video"];
     openssh.authorizedKeys.keys = [
       # TODO: migrate keys to here
     ];
@@ -72,6 +74,8 @@
 
   # allows for gtk themeing from home-manager
   programs.dconf.enable = true;
+
+  programs.steam.enable = true;
 
   # List services that you want to enable:
 
@@ -105,6 +109,7 @@
   environment.systemPackages = with pkgs; [
     killall
     powertop
+    ddcutil
   ];
 
   # Enable sound.
