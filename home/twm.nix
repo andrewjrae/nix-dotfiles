@@ -4,13 +4,13 @@
   imports = [
     ./rofi.nix
     ./spicetify.nix
+    ./firefox.nix
   ];
 
   home.file.".background-image".source = ../configs/background-image;
 
   # Various packages required by both my TWM configs
   home.packages = with pkgs; [
-    firefox
     blueberry
     alsa-utils
     playerctl
