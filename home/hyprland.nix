@@ -152,8 +152,8 @@
       bind =, xf86audiomute, exec, amixer -q set Master toggle
       bind =, xf86audiolowervolume, exec, amixer -q set Master 5%-
       bind =, xf86audioraisevolume, exec, amixer -q set Master 5%+
-      bind =, xf86monbrightnessup,  exec, brightnessctl s +5%
-      bind =, xf86monbrightnessdown, exec, brightnessctl s 5%-
+      bind =, xf86monbrightnessup,  exec, ~/.config/hypr/scripts/brightness.sh +5%
+      bind =, xf86monbrightnessdown, exec, ~/.config/hypr/scripts/brightness.sh 5%-
       bind =, xf86audioplay, exec, playerctl play-pause
       bind =, xf86audionext, exec, playerctl next
       bind =, xf86audioprev, exec, playerctl previous
@@ -171,10 +171,10 @@
       monitor = $laptopMonitor
       monitor = desc:PXO Pixio PXC348C, preferred, 0x-1440, 1
       bindl =, switch:off:Lid Switch, exec, hyprctl keyword monitor "$laptopMonitor"
-      bindl =, switch:on:Lid Switch, exec, ~/.config/hypr/lidswitch.sh
+      bindl =, switch:on:Lid Switch, exec, ~/.config/hypr/scripts/lidswitch.sh
       # ----- window rules -----
       #windowrule = float, blueberry
       '';
   };
-  xdg.configFile."hypr/lidswitch.sh".source = ../configs/hypr/lidswitch.sh;
+  xdg.configFile."hypr/scripts".source = ../configs/hypr/scripts;
 }
