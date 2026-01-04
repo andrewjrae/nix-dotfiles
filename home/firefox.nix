@@ -15,6 +15,9 @@
         "toolkit.telemetry.enabled" = false;
         "browser.search.geoip.url" = "";
         "network.cookie.cookieBehavior" = 4;
+        "browser.urlbar.quicksuggest.migrationVersion" = 6;
+        "browser.newtabpage.enabled" = false;
+        "browser.startup.homepage" = "chrome://browser/content/blanktab.html";
       };
 
       extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
@@ -24,4 +27,6 @@
       ];
     };
   };
+
+  xdg.configFile.tridactyl.source = ../configs/tridactyl;
 }
