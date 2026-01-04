@@ -87,6 +87,8 @@
       PasswordAuthentication = false;
     };
   };
+  programs.ssh.startAgent = true;
+
   # Enable avahi for mDNS lookup
   # (otherwise can't ssh to hostname with my current router)
   services.avahi = {
