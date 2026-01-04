@@ -200,36 +200,115 @@
    '';
   };
 
-  services.spacebar = {
+  services.sketchybar = {
     enable = true;
-    package = pkgs.spacebar;
-    config = {
-      position = "top";
-      height = 32;
-      title = "off";
-      spaces = "on";
-      power = "on";
-      clock = "on";
-      right_shell = "off";
-      padding_left = 20;
-      padding_right = 20;
-      spacing_left = 25;
-      spacing_right = 25;
-      text_font = ''"Fira Sans:Regular:16.0"'';
-      icon_font = ''"Font Awesome 5 Free:Solid:14.0"'';
-      background_color = "0x88282c34";
-      foreground_color = "0xffbbc2cf";
-      space_icon_color = "0xffc678dd";
-      power_icon_color = "0xff98be65";
-      battery_icon_color = "0xffecbe7b";
-      power_icon_strip = " ";
-      space_icon_strip = "1 2 3 4 5 6 7 8 9";
-      spaces_for_all_displays = "on";
-      display_separator = "on";
-      display_separator_icon = "|";
-      clock_format = ''"%d/%m/%y %R"'';
-      right_shell_icon = " ";
-      right_shell_command = "whoami";
-    };
+    config = ''
+PLUGIN_DIR=~/SketchyBar/plugins
+
+
+##### Bar Appearance #####
+# Configuring the general appearance of the bar.
+# These are only some of the options available. For all options see:
+# https://felixkratz.github.io/SketchyBar/config/bar
+# If you are looking for other colors, see the color picker:
+# https://felixkratz.github.io/SketchyBar/config/tricks#color-picker
+
+sketchybar --bar position=top height=32 blur_radius=30 color=0x40000000
+
+##### Changing Defaults #####
+# We now change some default values, which are applied to all further items.
+# For a full list of all available item properties see:
+# https://felixkratz.github.io/SketchyBar/config/items
+
+default=(
+  padding_left=5
+  padding_right=5
+  icon.font="Font Awesome 5 Free:Solid:14.0"
+  label.font="Fira Sans:Regular:16.0"
+  icon.color=0xffffffff
+  label.color=0xffffffff
+  icon.padding_left=4
+  icon.padding_right=4
+  label.padding_left=4
+  label.padding_right=4
+)
+sketchybar --default "''${default[@]}"
+
+##### Adding Mission Control Space Indicators #####
+# Let's add some mission control spaces:
+# https://felixkratz.github.io/SketchyBar/config/components#space----associate-mission-control-spaces-with-an-item
+# to indicate active and available mission control spaces.
+
+SPACE_ICONS=("1" "2" "3" "4" "5" "6" "7" "8" "9" "10")
+for i in "''${!SPACE_ICONS[@]}"
+do
+  sid="$(($i+1))"
+  space=(
+    space="$sid"
+    icon="''${SPACE_ICONS[i]}"
+    icon.padding_left=7
+    icon.padding_right=7
+    background.color=0x40ffffff
+    background.corner_radius=5
+    background.height=25
+    label.drawing=off
+    script="$PLUGIN_DIR/space.sh"
+    click_script="yabai -m space --focus $sid"
+  )
+  sketchybar --add space space."$sid" left --set space."$sid" "''${space[@]}"
+done
+
+##### Adding Right Items #####
+# In the same way as the left items we can add items to the right side.
+# Additional position (e.g. center) are available, see:
+# https://felixkratz.github.io/SketchyBar/config/items#adding-items-to-sketchybar
+
+# Some items refresh on a fixed cycle, e.g. the clock runs its script once
+# every 10s. Other items respond to events they subscribe to, e.g. the
+# volume.sh script is only executed once an actual change in system audio
+# volume is registered. More info about the event system can be found here:
+# https://felixkratz.github.io/SketchyBar/config/events
+
+sketchybar --add item clock right \
+           --set clock update_freq=10 script="$PLUGIN_DIR/clock.sh" \
+           --add item battery right \
+           --set battery update_freq=120 script="$PLUGIN_DIR/battery.sh" \
+           --subscribe battery system_woke power_source_change
+
+##### Force all scripts to run the first time (never do this in a script) #####
+sketchybar --update
+    '';
   };
+  # services.spacebar = {
+  #   enable = true;
+  #   package = pkgs.spacebar;
+  #   config = {
+  #     position = "top";
+  #     height = 32;
+  #     title = "off";
+  #     spaces = "on";
+  #     power = "on";
+  #     clock = "on";
+  #     right_shell = "off";
+  #     padding_left = 20;
+  #     padding_right = 20;
+  #     spacing_left = 25;
+  #     spacing_right = 25;
+  #     text_font = ''"Fira Sans:Regular:16.0"'';
+  #     icon_font = ''"Font Awesome 5 Free:Solid:14.0"'';
+  #     background_color = "0x88282c34";
+  #     foreground_color = "0xffbbc2cf";
+  #     space_icon_color = "0xffc678dd";
+  #     power_icon_color = "0xff98be65";
+  #     battery_icon_color = "0xffecbe7b";
+  #     power_icon_strip = " ";
+  #     space_icon_strip = "1 2 3 4 5 6 7 8 9";
+  #     spaces_for_all_displays = "on";
+  #     display_separator = "on";
+  #     display_separator_icon = "|";
+  #     clock_format = ''"%d/%m/%y %R"'';
+  #     right_shell_icon = " ";
+  #     right_shell_command = "whoami";
+  #   };
+  # };
 }
