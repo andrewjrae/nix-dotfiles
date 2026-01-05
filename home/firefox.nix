@@ -1,5 +1,8 @@
 { pkgs, inputs, ... }:
 
+let
+  ff-ext-pkgs = inputs.firefox-addons.packages.${pkgs.stdenv.hostPlatform.system};
+in
 {
   programs.firefox = {
     enable = true;
@@ -20,7 +23,7 @@
         "browser.startup.homepage" = "chrome://browser/content/blanktab.html";
       };
 
-      extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
+      extensions.packages = with ff-ext-pkgs; [
         ublock-origin
         darkreader
         tridactyl
