@@ -2,28 +2,37 @@
 
 {
   imports = [
-    ./twm.nix
+    ../twm.nix
   ];
 
-  services.mako = {
-    enable = true;
-    settings.default-timeout = 2500;
+  
+  options = with lib; with types; {
+    hyprMonitorCfg = mkOption {
+      type = str;
+      default = "";
+    };
   };
 
-  home.packages = with pkgs; [
-    swaybg
-    socat
-    jaq
-    grim
-    slurp
-    wl-clipboard
-    tessen
-  ];
+  config = {
+    services.mako = {
+      enable = true;
+      settings.default-timeout = 2500;
+    };
 
-  wayland.windowManager.hyprland = {
-    enable = true;
-    package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
-    extraConfig = ''
+    home.packages = with pkgs; [
+      swaybg
+      socat
+      jaq
+      grim
+      slurp
+      wl-clipboard
+      tessen
+    ];
+
+    wayland.windowManager.hyprland = {
+      enable = true;
+      package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+      extraConfig = ''
       # ----- setup -----
       env = XDG_CURRENT_DESKTOP, Hyprland
       env = XDG_SESSION_TYPE, wayland
@@ -166,15 +175,10 @@
       animation = windowsMove, 0, 8, default
       animation = fade, 0, 8, default
       animation = border, 0, 8, default
-      # ----- monitor configs -----
-      $laptopMonitor = eDP-1, preferred, 0x0, 1
-      monitor = $laptopMonitor
-      monitor = desc:PXO Pixio PXC348C, preferred, 0x-1440, 1
-      bindl =, switch:off:Lid Switch, exec, hyprctl keyword monitor "$laptopMonitor"
-      bindl =, switch:on:Lid Switch, exec, ~/.config/hypr/scripts/lidswitch.sh
       # ----- window rules -----
       #windowrule = float, blueberry
-      '';
+      '' + config.hyprMonitorCfg;
+    };
+    xdg.configFile."hypr/scripts".source = ../../configs/hypr/scripts;
   };
-  xdg.configFile."hypr/scripts".source = ../configs/hypr/scripts;
 }

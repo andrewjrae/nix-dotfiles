@@ -1,6 +1,10 @@
 { config, lib, pkgs, ... }:
 
 {
+  imports = [
+    ../../nixos/common.nix
+  ];
+
   nix.settings.system-features = [ "nix-command" "flakes" ];
   nix.extraOptions = "experimental-features = nix-command flakes";
 
@@ -14,10 +18,4 @@
     tmux
     neovim
   ];
-
-  isoImage = {
-    edition = lib.mkForce "live-nixos";
-    isoBaseName = "live-nixos";
-    volumeID = "live-nixos";
-  };
 }

@@ -122,7 +122,8 @@
                     ./home/users/ajrae
                     ./home/standard.nix
                     # ./home/xmonad.nix
-                    ./home/hyprland.nix
+                    ./home/hyprland
+                    ./home/hyprland/garibaldi.nix
                     inputs.hyprland.homeManagerModules.default
                     ({home-manager,...}: { services.emacs.enable = true; })
                   ];
@@ -139,12 +140,38 @@
           specialArgs = { inherit inputs; };
         };
 
-        "live" = nixpkgs.lib.nixosSystem {
+        "live" = nixpkgs.lib.nixosSystem rec {
           system = "x86_64-linux";
           modules = [
-            ./hosts/live
             "${inputs.nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
+            ./hosts/live
+            ./nixos/hyprland.nix
+            inputs.hyprland.nixosModules.default
+            inputs.home-manager.nixosModules.home-manager
+            {
+              home-manager = {
+                extraSpecialArgs = { inherit inputs; emacs-overlay-packages = inputs.emacs-overlay.packages."${system}"; };
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                users.ajrae = {
+                  imports = [
+                    ./home/users/ajrae
+                    ./home/standard.nix
+                    ./home/hyprland
+                    inputs.hyprland.homeManagerModules.default
+                    ({home-manager,...}: { services.emacs.enable = true; })
+                  ];
+                };
+              };
+              nixpkgs = {
+                config.allowUnfree = true;
+                overlays = [
+                  inputs.emacs-overlay.overlay
+                ];
+              };
+            }
           ];
+          specialArgs = { inherit inputs; };
         };
 
         "jukebox" = nixpkgs.lib.nixosSystem {

@@ -12,12 +12,8 @@
     ];
 
   boot.kernelParams = ["acpi_rev_override=1"];
-  boot.kernelModules = [ "acpi_call" "i2c-dev" "ddcci_backlight" ];
-  boot.extraModulePackages = with config.boot.kernelPackages; [ acpi_call ddcci-driver ];
-
-  boot.supportedFilesystems = ["ntfs"];
-  boot.binfmt.emulatedSystems = ["aarch64-linux"];
-  nix.settings.extra-platforms = ["aarch64-linux"];
+  boot.kernelModules = [ "acpi_call" ];
+  boot.extraModulePackages = with config.boot.kernelPackages; [ acpi_call ];
 
   # Bootloader.
   boot.loader.systemd-boot = {
@@ -33,73 +29,9 @@
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  # Enable networking
-  networking.networkmanager.enable = true;
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-
-  # Set your time zone.
-  time.timeZone = "America/Toronto";
-
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_CA.UTF-8";
-
-  hardware.graphics.enable = true;
-
-  hardware.i2c.enable = true;
-  hardware.bluetooth = {
-    enable = true;
-    # battery info support
-    package = pkgs.bluez;
-  };
-
-  # Auto mount usb devices
-  services.devmon.enable = true;
-  services.gvfs.enable = true;
-
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.ajrae = {
-    isNormalUser = true;
-    extraGroups = [ "networkmanager" "wheel" "docker" "video"];
-    openssh.authorizedKeys.keys = [
-      # TODO: migrate keys to here
-    ];
-    shell = pkgs.zsh;
-  };
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
-  # home manager does the rest, but this is needed for everything to work
-  programs.zsh.enable = true;
-
-  # allows for gtk themeing from home-manager
-  programs.dconf.enable = true;
-
   programs.steam.enable = true;
 
   # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  services.openssh = {
-    enable = true;
-    settings = {
-      PermitRootLogin = "no";
-      PasswordAuthentication = false;
-    };
-  };
-  programs.ssh.startAgent = true;
-
-  # Enable avahi for mDNS lookup
-  # (otherwise can't ssh to hostname with my current router)
-  services.avahi = {
-    enable = true;
-    nssmdns4 = true;
-    publish = {
-      enable = true;
-      addresses = true;
-      workstation = true;
-    };
-  };
 
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [ 22 ];
@@ -107,45 +39,12 @@
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
-  environment.enableAllTerminfo = true;
-  environment.systemPackages = with pkgs; [
-    killall
-    powertop
-    ddcutil
-  ];
-
-  environment.pathsToLink = [ "/share/applications" "/share/xdg-desktop-portal" ];
-
-  # Enable sound.
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
-
   # Enable upower
   services.upower.enable = true;
 
-  # docker
-  virtualisation.docker.enable = true;
-
-  # Greetd for login
-  services.greetd = {
-    enable = true;
-    settings = {
-      default_session = {
-        command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --remember-session --cmd ${config.wmCmd}";
-        user = "greeter";
-      };
-    };
-  };
-
-  fonts.fontconfig.defaultFonts = {
-    sansSerif = [ "Fira" ];
-    monospace = [ "Fira Code" ];
-  };
+  environment.systemPackages = with pkgs; [
+    powertop
+  ];
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
