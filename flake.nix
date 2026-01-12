@@ -140,6 +140,40 @@
           specialArgs = { inherit inputs; };
         };
 
+      nixosConfigurations = {
+        "cyprus" = nixpkgs.lib.nixosSystem rec {
+          system = "x86_64-linux";
+          modules = [
+            ./hosts/cyprus
+            ./nixos/hyprland.nix
+            inputs.hyprland.nixosModules.default
+            inputs.home-manager.nixosModules.home-manager
+            {
+              home-manager = {
+                extraSpecialArgs = { inherit inputs; emacs-overlay-packages = inputs.emacs-overlay.packages."${system}"; };
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                users.ajrae = {
+                  imports = [
+                    ./home/users/ajrae
+                    ./home/standard.nix
+                    ./home/hyprland
+                    inputs.hyprland.homeManagerModules.default
+                    ({home-manager,...}: { services.emacs.enable = true; })
+                  ];
+                };
+              };
+              nixpkgs = {
+                config.allowUnfree = true;
+                overlays = [
+                  inputs.emacs-overlay.overlay
+                ];
+              };
+            }
+          ];
+          specialArgs = { inherit inputs; };
+        };
+
         "live" = nixpkgs.lib.nixosSystem rec {
           system = "x86_64-linux";
           modules = [
