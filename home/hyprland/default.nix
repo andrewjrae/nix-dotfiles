@@ -112,6 +112,7 @@
       bind = SUPER, p, exec, tessen -d rofi
       # exit
       bind = SHIFT SUPER, q, exec, hyprctl dispatch exit
+      bind = CTRL SUPER, q, exec, systemctl suspend
       # window misc
       bind = SUPER, x, killactive
       bind = SUPER, f, fullscreen, 1

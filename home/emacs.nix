@@ -7,7 +7,12 @@ let
   #   epkgs.pdf-tools
   #   epkgs.org-pdftools
   # ]));
-  emacs-gui = pkgs.emacs-unstable-pgtk;
+  emacs-gui = with pkgs; ((emacsPackagesFor emacs-unstable-pgtk).emacsWithPackages (epkgs: [
+    epkgs.vterm
+    epkgs.pdf-tools
+    epkgs.org-pdftools
+    epkgs.treesit-grammars.with-all-grammars
+  ]));
   emacs-tui = with pkgs; ((emacsPackagesFor emacs30-nox).emacsWithPackages (epkgs: [
     epkgs.vterm
     epkgs.treesit-grammars.with-all-grammars
@@ -84,5 +89,5 @@ in
     defaultEditor = true;
   };
 
-  home.sessionPath = [ "$HOME/.emacs.d/bin" ];
+  home.sessionPath = [ "$HOME/.emacs.d/bin" "$HOME/.config/emacs/bin" ];
 }

@@ -119,15 +119,15 @@ in
 
     # Enable networking
     networking.networkmanager.enable = true;
-    # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
     boot.supportedFilesystems = ["ntfs"];
 
     # for ddcci back light control
-    boot.kernelModules = [ "i2c-dev" "ddcci_backlight" ];
-    hardware.i2c.enable = true;
+    # boot.kernelModules = [ "i2c-dev" "ddcci_backlight" ];
+    # hardware.i2c.enable = true;
+    # boot.extraModulePackages = with config.boot.kernelPackages; [ ddcci-driver ];
+    services.ddccontrol.enable = true;
 
-    boot.extraModulePackages = with config.boot.kernelPackages; [ ddcci-driver ];
 
     boot.binfmt.emulatedSystems = ["aarch64-linux"];
     nix.settings.extra-platforms = ["aarch64-linux"];

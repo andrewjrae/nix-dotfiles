@@ -17,6 +17,7 @@
       htop
       libqalculate
       wget
+      tree
     ]
     ++
     (if pkgs.stdenv.isDarwin

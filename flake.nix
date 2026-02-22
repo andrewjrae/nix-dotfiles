@@ -140,7 +140,6 @@
           specialArgs = { inherit inputs; };
         };
 
-      nixosConfigurations = {
         "cyprus" = nixpkgs.lib.nixosSystem rec {
           system = "x86_64-linux";
           modules = [
