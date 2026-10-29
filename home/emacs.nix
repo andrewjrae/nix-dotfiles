@@ -17,7 +17,7 @@ let
     epkgs.vterm
     epkgs.treesit-grammars.with-all-grammars
   ]));
-  emacs-mac = with pkgs; ((emacsPackagesFor emacs30).emacsWithPackages (epkgs: [
+  emacs-mac = with pkgs; ((emacsPackagesFor emacs).emacsWithPackages (epkgs: [
     epkgs.vterm
     epkgs.pdf-tools
     epkgs.org-pdftools
@@ -58,12 +58,12 @@ in
     rust-analyzer
     clippy
 
-    aider-chat
+    gh
 
     # :checkers spell
-    (aspellWithDicts (ds: with ds; [
-      en en-computers en-science
-    ]))
+    # (aspellWithDicts (ds: with ds; [
+    #   en en-computers en-science
+    # ]))
   ]
   ++
   # :lang org
@@ -78,7 +78,6 @@ in
          roboto
          latexmk;})
       graphviz
-      nodePackages.mermaid-cli
       pdf2svg
       pandoc]
   );

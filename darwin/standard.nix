@@ -34,8 +34,6 @@ in {
   users.users.ajrae = {
     home = "/Users/ajrae";
     packages = with pkgs; [
-      # yabai
-      # skhd
       jankyborders
       jq
       pinentry_mac
@@ -51,6 +49,11 @@ in {
   system.stateVersion = 4;
 
   #  system.keyboard = {
+  homebrew = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+
   #    enableKeyMapping = true;
   #    remapCapsLockToEscape = true;
   #  };

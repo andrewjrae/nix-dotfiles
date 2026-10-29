@@ -1,9 +1,12 @@
 { config, lib, pkgs, ... }:
 
+let
+  skhd-zig = pkgs.callPackage ../packages/skhd-zig.nix { };
+in
 {
   users.users.ajrae.packages = with pkgs; [
     yabai
-    skhd
+    pup
   ];
   services.yabai = {
     enable = true;
@@ -65,24 +68,19 @@
 
   services.skhd = {
     enable = true;
-    package = pkgs.skhd;
+    package = skhd-zig;
     skhdConfig = let
-      passthru = key: ''skhd -k "hyper - 1" ; skhd -k "${key}" ; skhd -k "hyper - 1"'';
-      remap-for-mac = key:
+      forward-for-mac = key:
         ''[
-             "Alacritty" ~
              "emacs" ~
              "wezterm" ~
              "wezterm-gui" ~
-             * : ${passthru key}
+             * | ${key}
         ]'';
       focus-space = index: ''skhd -k "ctrl - ${index}"'';
       last-space-index = ''$(yabai -m query --spaces | jq --argjson id `cat /tmp/yabai-last-space` '.[] | select(.id == $id).index')'';
     in
       ''
-     :: default
-     :: passthru
-
      ########## Yabai bindings
      # open to apps
      # cmd - t : open -n -a ~/Applications/Home\ Manager\ Apps/Alacritty.app
@@ -95,9 +93,9 @@
      cmd - m : open -a Spotify
      # cmd - e : emacsclient -c -a emacs
      cmd - e : open -a ~/Applications/Home\ Manager\ Apps/Emacs.app
-     cmd - r : ${passthru "cmd - space"}
+     cmd - r | cmd - space
      cmd - q : open -n -a wezterm --args start -- qalc
-     cmd - p : rofi-pass
+     # cmd - p : rofi-pass
 
      # focus window
      cmd - n : yabai -m window --focus next
@@ -115,18 +113,18 @@
 
      # focus spaces
      cmd - space : ${focus-space last-space-index}
-     cmd - 1 : ${focus-space "1"}
-     cmd - 2 : ${focus-space "2"}
-     cmd - 3 : ${focus-space "3"}
-     cmd - 4 : ${focus-space "4"}
-     cmd - 5 : ${focus-space "5"}
-     cmd - 6 : ${focus-space "6"}
-     cmd - 7 : ${focus-space "7"}
-     cmd - 8 : ${focus-space "8"}
-     cmd - 9 : ${focus-space "9"}
+     cmd - 1 | ctrl - 1
+     cmd - 2 | ctrl - 2
+     cmd - 3 | ctrl - 3
+     cmd - 4 | ctrl - 4
+     cmd - 5 | ctrl - 5
+     cmd - 6 | ctrl - 6
+     cmd - 7 | ctrl - 7
+     cmd - 8 | ctrl - 8
+     cmd - 9 | ctrl - 9
 
      # send window to desktop
-     ctrl + cmd - space : yabai -m window --space recent
+     # ctrl + cmd - space is already bound above to focus the recent display.
      ctrl + cmd - 1 : yabai -m window --space 1
      ctrl + cmd - 2 : yabai -m window --space 2
      ctrl + cmd - 3 : yabai -m window --space 3
@@ -159,44 +157,41 @@
 
 
      ########## PC-style bindings
-     # need this passthru hack to avoid calling back into skhd
-     hyper - 1 ; passthru
-     passthru < hyper - 1 ; default
-
-     home ${remap-for-mac "cmd - left"}
-     end ${remap-for-mac "cmd - right"}
-     ctrl - a ${remap-for-mac "cmd - a"}
-     ctrl - b ${remap-for-mac "cmd - b"}
-     ctrl - i ${remap-for-mac "cmd - i"}
-     ctrl - p ${remap-for-mac "cmd - p"}
-     ctrl - c ${remap-for-mac "cmd - c"}
-     ctrl - v ${remap-for-mac "cmd - v"}
-     ctrl - z ${remap-for-mac "cmd - z"}
-     ctrl - y ${remap-for-mac "shift + cmd - z"}
-     ctrl - f ${remap-for-mac "cmd - f"}
-     ctrl - t ${remap-for-mac "cmd - t"}
-     ctrl - k ${remap-for-mac "cmd - k"}
-     ctrl - w ${remap-for-mac "cmd - w"}
-     ctrl - n ${remap-for-mac "cmd - n"}
-     ctrl - insert ${remap-for-mac "cmd - c"}
-     shift - insert ${remap-for-mac "cmd - v"}
-     ctrl - left ${remap-for-mac "alt - left"}
-     ctrl - right ${remap-for-mac "alt - right"}
-     ctrl - down ${remap-for-mac "alt - down"}
-     ctrl - up ${remap-for-mac "alt - up"}
-     shift - home ${remap-for-mac "shift + cmd - left"}
-     shift - end ${remap-for-mac "shift + cmd - right"}
-     shift + ctrl - left ${remap-for-mac "shift + alt - left"}
-     shift + ctrl - right ${remap-for-mac "shift + alt - right"}
-     shift + ctrl - down ${remap-for-mac "shift + alt - down"}
-     shift + ctrl - up ${remap-for-mac "shift + alt - up"}
-     ctrl - s ${remap-for-mac "cmd - s"}
-     ctrl - backspace ${remap-for-mac "alt - backspace"}
-     ctrl - delete ${remap-for-mac "alt - delete"}
-     shift + ctrl - t ${remap-for-mac "shift + cmd - t"}
+     home ${forward-for-mac "cmd - left"}
+     end ${forward-for-mac "cmd - right"}
+     ctrl - a ${forward-for-mac "cmd - a"}
+     ctrl - b ${forward-for-mac "cmd - b"}
+     ctrl - i ${forward-for-mac "cmd - i"}
+     ctrl - p ${forward-for-mac "cmd - p"}
+     ctrl - c ${forward-for-mac "cmd - c"}
+     ctrl - v ${forward-for-mac "cmd - v"}
+     ctrl - z ${forward-for-mac "cmd - z"}
+     ctrl - y ${forward-for-mac "shift + cmd - z"}
+     ctrl - f ${forward-for-mac "cmd - f"}
+     ctrl - t ${forward-for-mac "cmd - t"}
+     ctrl - k ${forward-for-mac "cmd - k"}
+     ctrl - w ${forward-for-mac "cmd - w"}
+     ctrl - n ${forward-for-mac "cmd - n"}
+     ctrl - q ${forward-for-mac "cmd - q"}
+     ctrl - insert ${forward-for-mac "cmd - c"}
+     shift - insert ${forward-for-mac "cmd - v"}
+     ctrl - left ${forward-for-mac "alt - left"}
+     ctrl - right ${forward-for-mac "alt - right"}
+     ctrl - down ${forward-for-mac "alt - down"}
+     ctrl - up ${forward-for-mac "alt - up"}
+     shift - home ${forward-for-mac "shift + cmd - left"}
+     shift - end ${forward-for-mac "shift + cmd - right"}
+     shift + ctrl - left ${forward-for-mac "shift + alt - left"}
+     shift + ctrl - right ${forward-for-mac "shift + alt - right"}
+     shift + ctrl - down ${forward-for-mac "shift + alt - down"}
+     shift + ctrl - up ${forward-for-mac "shift + alt - up"}
+     ctrl - s ${forward-for-mac "cmd - s"}
+     ctrl - backspace ${forward-for-mac "alt - backspace"}
+     ctrl - delete ${forward-for-mac "alt - delete"}
+     shift + ctrl - t ${forward-for-mac "shift + cmd - t"}
      # screen shots
-     0x69 : ${passthru "shift + cmd - 3"}
-     shift + ctrl - 0x69 : ${passthru "shift + ctrl + cmd - 4"}
+     0x69 | shift + cmd - 3
+     shift + ctrl - 0x69 | shift + ctrl + cmd - 4
    '';
   };
 
@@ -273,7 +268,10 @@ sketchybar --add item clock right \
            --set clock update_freq=10 script="$PLUGIN_DIR/clock.sh" \
            --add item battery right \
            --set battery update_freq=120 script="$PLUGIN_DIR/battery.sh" \
-           --subscribe battery system_woke power_source_change
+           --subscribe battery system_woke power_source_change \
+           --add graph wind right 72 \
+           --set wind update_freq=300 script="$PLUGIN_DIR/ogden.sh 72 ${pkgs.pup}/bin/pup ${pkgs.python3}/bin/python" \
+           --subscribe wind system_woke
 
 ##### Force all scripts to run the first time (never do this in a script) #####
 sketchybar --update

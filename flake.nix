@@ -75,6 +75,7 @@
           modules = [
             ./darwin/standard.nix
             ./darwin/twm.nix
+            ./darwin/camilladsp.nix
             inputs.home-manager.darwinModules.home-manager
             {
               home-manager = {
