@@ -23,13 +23,6 @@ in {
   programs.rofi = {
     enable = true;
     package = pkgs.rofi;
-    pass = {
-      enable = true;
-      stores = [ "$HOME/.password-store" ];
-      extraConfig = ''
-        help_color="#a9a1e1"
-      '';
-    };
     # ported theme from rasi config
     theme = let
       # Use `mkLiteral` for string-like values that should show without

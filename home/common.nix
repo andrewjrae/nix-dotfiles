@@ -20,7 +20,7 @@
       tree
     ]
     ++
-    (if pkgs.stdenv.isDarwin
+    (if pkgs.hostPlatform.isDarwin
      then []
      else [
        gptfdisk

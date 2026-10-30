@@ -13,7 +13,6 @@
     (vol)
     (cpu)
     (ram)
-    (bat)
     (bluetooth)
     (wifi)
     (box :class "time" time)))

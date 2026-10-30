@@ -25,7 +25,7 @@ let
   ]));
   emacs-in-use = (if config.isServer
                   then emacs-tui
-                  else (if pkgs.stdenv.isDarwin
+                  else (if pkgs.hostPlatform.isDarwin
                         then emacs-mac
                         else emacs-gui));
 in
@@ -70,13 +70,14 @@ in
   (if config.isServer then
     []
    else
-     [(texlive.combine {
-       inherit (texlive)
+     [(texlive.withPackages (
+       ps: with ps; [
          scheme-medium
          collection-latexextra
          fontawesome5
          roboto
-         latexmk;})
+         latexmk
+       ]))
       graphviz
       pdf2svg
       pandoc]

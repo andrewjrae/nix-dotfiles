@@ -10,6 +10,7 @@ in
       pkgs.tridactyl-native
     ];
 
+
     profiles.ajrae = {
       settings = {
         "dom.security.https_only_mode" = true;

@@ -2,7 +2,7 @@
 
 {
   services.gpg-agent = {
-    enable = !pkgs.stdenv.isDarwin;
+    enable = !pkgs.hostPlatform.isDarwin;
     enableZshIntegration = true;
     defaultCacheTtl = 259200;
     maxCacheTtl = 31557600;

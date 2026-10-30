@@ -11,7 +11,7 @@
 
   # Various packages required by both my TWM configs
   home.packages = with pkgs; [
-    blueberry
+    blueman
     alsa-utils
     playerctl
     flameshot
@@ -19,7 +19,8 @@
     btop
     vim
     brightnessctl
-    xfce.thunar
+    discord
+    thunar
   ];
   services.recoll = {
     enable = true;
@@ -45,6 +46,6 @@
   programs.eww = {
     enable = true;
     package = pkgs.eww;
-    configDir = ../configs/eww;
   };
+  xdg.configFile.eww.source = ../configs/eww;
 }

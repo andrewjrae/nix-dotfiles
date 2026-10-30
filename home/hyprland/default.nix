@@ -5,7 +5,7 @@
     ../twm.nix
   ];
 
-  
+
   options = with lib; with types; {
     hyprMonitorCfg = mkOption {
       type = str;
@@ -28,6 +28,25 @@
       wl-clipboard
       tessen
     ];
+
+    services.hypridle = {
+      enable = true;
+      package = pkgs.hypridle;
+      settings = {
+        general = {
+          after_sleep_cmd = "hyprctl dispatch dpms on";
+          ignore_dbus_inhibit = false;
+        };
+        listener = [
+          {
+            # use misc features to get dpms back on
+            on-resume = "hyprctl dispatch dpms on";
+            on-timeout = "hyprctl dispatch dpms off";
+            timeout = 600;
+          }
+        ];
+      };
+    };
 
     wayland.windowManager.hyprland = {
       enable = true;
@@ -86,7 +105,9 @@
             disable_hyprland_logo = true
             disable_splash_rendering = true
             enable_swallow = false
-            swallow_regex = Alacritty
+            # swallow_regex = Alacritty
+            mouse_move_enables_dpms = true
+            # key_press_enables_dpms = true
       }
       cursor {
         hide_on_key_press = true
@@ -112,7 +133,7 @@
       bind = SUPER, p, exec, tessen -d rofi
       # exit
       bind = SHIFT SUPER, q, exec, hyprctl dispatch exit
-      bind = CTRL SUPER, q, exec, systemctl suspend
+      bind = CTRL SUPER, q, exec, hyprctl dispatch dpms toggle
       # window misc
       bind = SUPER, x, killactive
       bind = SUPER, f, fullscreen, 1
@@ -171,6 +192,7 @@
       # screenshots
       bind =, Print, exec, grim -g "$(slurp)" - | wl-copy -t image/png
       bind = SHIFT CTRL, PRINT, exec, grim -g "$(slurp)" - | wl-copy -t image/png
+      bind = SHIFT CTRL, s, exec, grim -g "$(slurp)" - | wl-copy -t image/png
       # ----- animations -----
       animation = windows, 1, 8, default, popin
       animation = windowsMove, 0, 8, default

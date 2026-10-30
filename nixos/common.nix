@@ -16,7 +16,7 @@ in
     nix = {
       settings = {
         # Enable flakes and new 'nix' command
-        experimental-features = "nix-command flakes";
+        experimental-features = ["nix-command" "flakes"];
         # Deduplicate and optimize nix store
         auto-optimise-store = true;
       };
@@ -82,10 +82,9 @@ in
     services.avahi = {
       enable = true;
       nssmdns4 = true;
-      publish = {
-        enable = true;
-        addresses = true;
-        workstation = true;
+      settings.publish = {
+        publish-addresses = true;
+        publish-workstation = true;
       };
     };
 

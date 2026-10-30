@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  alacrittyConfig = (if pkgs.stdenv.isDarwin
+  alacrittyConfig = (if pkgs.hostPlatform.isDarwin
                      then ../configs/alacritty/darwin.yml
                      else ../configs/alacritty/linux.yml);
 in
