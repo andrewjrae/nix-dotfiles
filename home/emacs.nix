@@ -60,6 +60,11 @@ in
 
     gh
 
+    (pkgs.python3.withPackages (ps: with ps; [
+      numpy
+      matplotlib
+    ]))
+
     # :checkers spell
     # (aspellWithDicts (ds: with ds; [
     #   en en-computers en-science

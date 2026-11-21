@@ -36,7 +36,7 @@ in
     };
 
     # docker
-    virtualisation.docker.enable = true;
+    virtualisation.docker.enable = lib.mkDefault true;
 
     # Enable sound.
     security.rtkit.enable = true;
@@ -82,7 +82,9 @@ in
     services.avahi = {
       enable = true;
       nssmdns4 = true;
+      openFirewall = true;
       settings.publish = {
+        disable-publishing = false;
         publish-addresses = true;
         publish-workstation = true;
       };

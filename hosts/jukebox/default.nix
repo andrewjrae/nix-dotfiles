@@ -16,6 +16,8 @@
   # Enable networking
   networking.networkmanager.enable = true;
 
+  virtualisation.docker.enable = false;
+
   # Set your time zone.
   time.timeZone = "America/Vancouver";
 
